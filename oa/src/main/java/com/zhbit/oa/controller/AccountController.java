@@ -183,7 +183,7 @@ public class AccountController {
         System.out.println("角色list"+permissionService.findAllCharacter());
         return "newAccountForm";
     }
-
+//显示账户列表
     @RequestMapping(value = "/accountTable")
     public String findAll(Model model) {
         System.out.println("进入findAll");
