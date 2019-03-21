@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.MechanismMapper">
+    <insert id="addMechanism" parameterType="Mechanism">
+        INSERT INTO oa_mechanism (mid,mname,mpeopleNum,mdescription) values
+        (#{mid},#{mname},#{mpeopleNum},#{mdescription})
+    </insert>
+    <select id="selectbyMid" parameterType="String" resultType="Mechanism">
+        select * from oa_mechanism where mid = #{mid}
+    </select>
+    <select id="selectbymname" parameterType="String" resultType="Mechanism">
+        select * from oa_mechanism where mname = #{mname}
+    </select>
+    <select id="findAll" parameterType="String" resultType="Mechanism">
+        select * from oa_mechanism
+    </select>
+    <delete id="deleteMechanism" parameterType="String">
+        delete from oa_mechanism where mid = #{mid}
+    </delete>
+    <update id="updateMechanism" parameterType="Mechanism">
+        update oa_mechanism set mname=#{mname} ,mpeopleNum=#{mpeopleNum}, mdescription = #{mdescription} where
+        mid=#{mid}
+    </update>
+</mapper>

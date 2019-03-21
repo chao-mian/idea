@@ -1,0 +1,247 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/WdatePicker.css"/>
+    <link rel="stylesheet" type="text/css" href="css/skin_/form.css"/>
+    <link href="umeditor/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jquery.select.js"></script>
+    <script type="text/javascript" src="js/WdatePicker.js"></script>
+    <script type="text/javascript">
+        window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
+    </script>
+    <script type="text/javascript" src="js/umeditor.config.js"></script>
+    <script type="text/javascript" src="js/editor_api.js"></script>
+    <script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
+
+    <title>基础信息</title>
+</head>
+<style type="text/css">
+    #one {
+        width: 200px;
+        height: 180px;
+        float: left
+    }
+
+    #two {
+        width: 50px;
+        height: 180px;
+        float: left
+    }
+
+    #three {
+        width: 200px;
+        height: 180px;
+        float: left
+    }
+
+    .btn {
+        width: 50px;
+        height: 30px;
+        margin-top: 10px;
+        cursor: pointer;
+    }
+</style>
+<body>
+<div id="container">
+    <div id="hd">
+    </div>
+    <div id="bd">
+
+        <div id="main" style="width: 480px ;margin:0 auto">
+            <h2 class="subfild">
+                <span>修改角色</span>
+            </h2>
+            <div class="subfild-content base-info">
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>角色名</label>
+                    <div class="kv-item-content">
+                        <input type="text" th:value="${character.cname}" class="cname" name="cname"
+                               placeholder="请输入角色名号"/>
+                    </div>
+                </div>
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>启用状态</label>
+                    <div class="kv-item-content">
+                            <span th:if="${character.cusing}=='Y'">
+                            启用<input type="radio" class="repassword" name="cusing" value="Y" checked="checked"/>
+                            停用<input type="radio" class="repassword" name="cusing" value="N"/>
+                            </span>
+                        <span th:if="${character.cusing}=='N'">
+                            启用<input type="radio" class="repassword" name="cusing" value="Y"/>
+                            停用<input type="radio" class="repassword" name="cusing" value="N" checked="checked"/>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <h2 class="subfild">
+                <span>拥有权限</span>
+            </h2>
+            <div class="subfild-content base-info">
+                <div class="kv-item ue-clear">
+                    <label><span class="impInfo">*</span>权限类型</label>
+                    <div class="kv-item-content">
+                        <select id="permissionType">
+                            <option value="" disabled selected hidden></option>
+                            <option>后台管理</option>
+                            <option>文件管理</option>
+                            <option>人员管理</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="kv-item ue-clear" style=" width:360px;margin:0 auto">
+                    <!--<label><span class="impInfo">*</span>权限</label>-->
+                    <div id="content1">
+                        <div>
+                            <div id="updateform">
+                                <select multiple="multiple" id="select1"
+                                        style="width:150px;height:200px; float:left; border:4px #A0A0A4 outset; padding:4px; ">
+                                    <tr th:each="permission:${list}">
+                                        <option>
+                                            <td th:text="${permission.pname}"></td>
+                                        </option>
+                                    </tr>
+                                </select>
+                            </div>
+                            <div style="float:left">
+                                <span id="add"><input type="button" class="btn" value=">"/></span><br/>
+                                <span id="add_all"><input type="button" class="btn" value=">>"/></span> <br/>
+                                <span id="remove"><input type="button" class="btn" value="<"/></span><br/>
+                                <span id="remove_all"><input type="button" class="btn" value="<<"/></span>
+                            </div>
+                            <div>
+                                <select multiple="multiple" id="select2"
+                                        style="width: 150px;height:200px; float:lfet;border:4px #A0A0A4 outset; padding:4px;">
+                                    <tr th:each="permission1:${character.permission}">
+                                        <option>
+                                            <td th:text="${permission1}"></td>
+                                        </option>
+                                    </tr>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="buttons">
+                <input class="button" id="continue" type="submit" value="确认修改"/>
+                <input class="button" id="cencel" type="button" value="取消"/>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+
+<script th:inline="javascript">
+    var aa = [[${list}]];
+    var bb = [[${character}]];
+    $('#add').click(function () {
+        //»ñÈ¡Ñ¡ÖÐµÄÑ¡Ïî£¬É¾³ý²¢×·¼Ó¸ø¶Ô·½
+        $('#select1 option:selected').appendTo('#select2');
+    });
+    //ÒÆµ½×ó±ß
+    $('#remove').click(function () {
+        $('#select2 option:selected').appendTo('#select1');
+    });
+    //È«²¿ÒÆµ½ÓÒ±ß
+    $('#add_all').click(function () {
+        //»ñÈ¡È«²¿µÄÑ¡Ïî,É¾³ý²¢×·¼Ó¸ø¶Ô·½
+        $('#select1 option').appendTo('#select2');
+    });
+    //È«²¿ÒÆµ½×ó±ß
+    $('#remove_all').click(function () {
+        $('#select2 option').appendTo('#select1');
+    });
+    //Ë«»÷Ñ¡Ïî
+    $('#select1').dblclick(function () { //°ó¶¨Ë«»÷ÊÂ¼þ
+        //»ñÈ¡È«²¿µÄÑ¡Ïî,É¾³ý²¢×·¼Ó¸ø¶Ô·½
+        $("option:selected", this).appendTo('#select2'); //×·¼Ó¸ø¶Ô·½
+    });
+    //Ë«»÷Ñ¡Ïî
+    $('#select2').dblclick(function () {
+        $("option:selected", this).appendTo('#select1');
+    });
+    var jsonpData = new Array();
+    $('#permissionType').change(function () {
+
+        if ($('#permissionType').val() == '后台管理') {
+            jsonpData[0] = "b";
+        } else if ($('#permissionType').val() == '文件管理') {
+            jsonpData[0] = "f";
+        } else if ($('#permissionType').val() == '人员管理') {
+            jsonpData[0] = "p";
+        }
+        $.ajax({
+            type: "post",
+            url: "jsonpData",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(jsonpData),
+            success: function (data) {
+                // alert(data);
+                // $('#updateform').remove();
+                $('#updateform').load("newCharacterForm" + ' #updateform').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+    });
+    showRemind('input[type=text],textarea', 'color5');
+    UM.getEditor('content');
+    $('#continue').click(function () {
+        var cname = $('.cname').val();
+        var cusing = $('input[name="cusing"]:checked').val()
+        jsonpData[0] = bb.cid;
+        jsonpData[1] = cname;
+        jsonpData[2] = cusing;
+        $("#select2 option").each(function () {  //遍历所有option
+            var txt = $(this).val();   //获取option值
+            for (var i = 0; i < aa.length; i++) {
+                if (aa[i].pname == txt) {
+                    txt = aa[i].pid;
+                    if (txt != '') {
+                        jsonpData.push(txt);  //添加到数组中
+                    }
+                }
+            }
+        });
+        // alert(jsonpData);
+        //判断是否有重复权限
+        for (var i = 3; i < jsonpData.length - 1; i++) {
+            for (var j = i + 1; j < jsonpData.length; j++) {
+                // alert(jsonpData[i]+"\n\n"+jsonpData[j]);
+                if (jsonpData[i] == jsonpData[j]) {
+                    alert("请勿重复添加相同权限")
+                    jsonpData.length = 0;
+                    return false;
+                }
+            }
+        }
+        $.ajax({
+            type: "post",
+            url: "jsonpData",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(jsonpData),
+            success: function (data) {
+                // alert(data);
+                // $('#updateform').remove();
+                window.location.href = "updateCharacter";
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+    });
+    $('#cencel').click(function () {
+        window.location.href = "CharacterTable";
+    });
+
+</script>
+</html>

@@ -1,0 +1,304 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/WdatePicker.css"/>
+    <link rel="stylesheet" type="text/css" href="css/skin_/table.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.grid.css"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jquery.select.js"></script>
+    <script type="text/javascript" src="js/core.js"></script>
+    <script type="text/javascript" src="js/jquery.pagination.js"></script>
+    <script type="text/javascript" src="js/jquery.grid.js"></script>
+    <script type="text/javascript" src="js/WdatePicker.js"></script>
+    <script type="text/javascript" src="js/jqAlert2.js"></script>
+    <!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
+    <title>表格</title>
+</head>
+
+<body>
+<span th:if="${flag}!=null">
+<script th:inline="javascript">
+var flag = [[${flag}]];
+alert(flag);
+</script>
+</span>
+<div id="container">
+    <div id="hd"></div>
+    <div id="bd">
+        <div id="main">
+            <div class="search-box ue-clear">
+                <div class="kv-item ue-clear">
+                    <p style=" font-size: 18px; font-weight: bold;">选择查询条件:</p><br/>
+                    <label style=" font-size: 16px;">权限名:<input type="radio" name="searchBy" class="searchBy"
+                                                                value="byName"/></label>
+                    <label style=" font-size: 16px;">状态:<input type="radio" name="searchBy" class="searchBy"
+                                                               value="byStatus"/></label>
+                </div>
+
+                <div class="kv-item ue-clear">
+
+                    <div class="kv-item-content" id="byName" style="display: none;">
+                        <input type="text" class="inputName" placeholder="请输入要查找的权限名" style="width: 180px;"/>
+                    </div>
+
+                    <div class="kv-item-content" id="byStatus" style="display: none;">
+                        启用<input type="radio" name="status" class="inputStatus" value="Y" checked/>
+                        停用<input type="radio" name="status" class="inputStatus" value="N"/>
+                    </div>
+                </div>
+                <div class="search-button" style="width:180px;float: left;">
+                    <input class="button" id="search" type="button" value="搜索一下"/>
+                </div>
+                <div class="search-button" style="width:180px;float: left;">
+                    <input class="button" id="showAll" type="button" value="显示所有"/>
+                </div>
+            </div>
+        </div>
+        <div class="table">
+            <div class="opt ue-clear">
+                	<span class="sortarea">
+                    	<span class="sort">
+                        	<label>排序：</label>
+                            <span class="name">
+                            	<i class="icon"></i>
+                                <span class="text">名称</span>
+                            </span>
+                        </span>
+                        <i class="list"></i>
+                        <i class="card"></i>
+                    </span>
+                <span class="optarea">
+                        <a href="javascript:;" class="add">
+                            <i class="icon"></i>
+                            <span class="text">添加</span>
+                        </a>
+                        <a class="delete" onclick=>
+                            <i class="icon"></i>
+                            <span class="text">删除</span>
+                        </a>
+
+                    <!--<a href="javascript:;" class="statistics">
+                        <i class="icon"></i>
+                        <span class="text">统计</span>
+                    </a>-->
+                        <a href="javascript:;" class="config">
+                            <i class="icon"></i>
+                            <span class="text">编辑</span>
+                        </a>
+                    </span>
+            </div>
+            <div class="grid"></div>
+            <!--<div class="pagination"></div>-->
+        </div>
+    </div>
+</div>
+</div>
+
+</body>
+<script th:inline="javascript">
+    var val;
+    $("input[name='searchBy']").click(function () {
+        val = $('input[name="searchBy"]:checked').val();
+        switch (val) {
+            case 'byName':
+                // alert("byName");
+                $('#byName').show();
+                $('#byStatus').hide();
+                break;
+            case 'byStatus':
+                // alert("byStatus");
+                $('#byName').hide();
+                $('#byStatus').show();
+                break;
+        }
+    });
+    var aa = [[${list}]];
+    var tbody = new Array();
+    for (var i = 0; i < aa.length; i++) {
+        tbody[i] = [aa[i].pname, aa[i].pvalue, aa[i].pusing, aa[i].pdescription, aa[i].pid];
+    }
+    $('select').select();
+    var head = [{
+        label: '权限名',
+        width: 150,
+        sortable: 'default',
+        name: '权限名'
+    }
+        , {
+            label: '权限值',
+            width: 150,
+            sortable: 'default',
+            name: '权限值'
+        }, {
+            label: '状态',
+            width: 150
+        }, {
+            label: '描述',
+            width: 300
+        }
+    ];
+
+    //显示所有数据
+    $('#showAll').click(function () {
+        window.location.href = "permissionTable";
+    });
+    //搜索一下按钮点击事件
+    $('#search').click(function () {
+        var selectValue = new Array();
+        var jsonpType;
+        switch (val) {
+            case 'byName':
+                selectValue[0] = $(".inputName").val();
+                if (selectValue[0] == "") {
+                    alert("请填写权限名后再搜索");
+                    return false;
+                }
+                jsonpType = "jsonpName";
+                // alert("获得的值："+selectValue[0]+"jsonaType:"+jsonaType);
+                break;
+            case 'byStatus':
+                selectValue[0] = $('input[name="status"]:checked').val();
+                jsonpType = "jsonpStatus";
+                // alert("获得的值："+selectValue[0]+"jsonaType:"+jsonaType);
+                break;
+            default:
+                alert("请选择查询条件");
+                return false;
+                break;
+        }
+        // alert(selectValue);
+        //局部刷新
+        $.ajax({
+            type: "post",
+            url: jsonpType,
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(selectValue),
+            success: function (data) {
+                // alert(data);
+                // $('.grid').remove();
+                window.location.href = "permissionTable";
+                // $('.grid').load("accountTable" + ' .grid').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+    });
+    //添加按钮点击事件
+    $(".add").on("click", function () {
+        window.location.href = "newPermissionForm";
+    });
+    $('.config').on('click', function (e) {
+        var ids = new Array();
+        ids = $('.grid').Grid('getCheckedIndex');
+        if (ids.length > 1) {
+            alert("请勿选择多条信息");
+            return false;
+        }
+        if (ids.length < 1) {
+            alert("请选择一条要修改的信息");
+            return false;
+        }
+        // alert(ids);
+        // alert(tbady);
+        var pid = new Array();
+        for (var i = 0; i < ids.length; i++) {
+            pid[i] = tbody[ids[i]][4];
+            // alert(aid[i]);
+        }
+        $.ajax({
+            type: "post",
+            url: "jsonpData",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(pid),
+            success: function (data) {
+                // alert(data);
+                window.location.href = "showPermission";
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+
+    });
+
+    $('.grid').Grid({
+        thead: head,
+        tbody: tbody,
+        height: 400,
+        checkbox: {
+            single: true
+        },
+        sortCallBack: function (name, index, type) {
+            alert(name + "," + index + ',' + type);
+        }
+    });
+    $(".statistics").click(function () {
+        return confirm("text？");
+        alert("em??");
+    });
+    $(".delete").click(function () {
+        var ids = new Array();
+        ids = $('.grid').Grid('getCheckedIndex');
+        // alert(ids);
+        // alert(tbady);
+        var pid = new Array();
+        var pname = new Array();
+        for (var i = 0; i < ids.length; i++) {
+            pid[i] = tbody[ids[i]][4];
+            pname[i] = tbody[ids[i]][0];
+            // alert(aid[i]);
+            // alert(aname[i]);
+        }
+        if (ids == "") {
+            alert("请选择至少一条数据");
+            return false;
+        }
+        if (!confirm("即将删除以下权限：\n" + pname + "\n\n确定删除吗？")) {
+            return false;
+        }
+
+        $.ajax({
+            type: "post",
+            url: "jsonpData",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(pid),
+            success: function (data) {
+                // alert(data);
+                window.location.href = "deletePermission";
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+    });
+    $('.grid').Grid('addLoading');
+    /// 模拟异步
+    setTimeout(function () {
+        $('.grid').Grid('setData', tbody, head);
+    }, 2000)
+
+    $('.pagination').pagination(100, {
+        callback: function (page) {
+            alert(page);
+        },
+        display_msg: false
+    });
+
+    $('.search-box input[type=radio]').click(function (e) {
+        if ($(this).prop('checked')) {
+            if ($(this).attr('data-define') === 'define') {
+                $('.define-input').show();
+            } else {
+                $('.define-input').hide();
+            }
+        }
+    });
+</script>
+</html>

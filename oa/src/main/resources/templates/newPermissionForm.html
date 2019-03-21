@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/WdatePicker.css"/>
+    <link rel="stylesheet" type="text/css" href="css/skin_/form.css"/>
+    <link href="umeditor/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jquery.select.js"></script>
+    <script type="text/javascript" src="js/WdatePicker.js"></script>
+    <script type="text/javascript">
+        window.UMEDITOR_HOME_URL = 'umeditor/';  // 请换成绝对路径
+    </script>
+    <script type="text/javascript" src="js/umeditor.config.js"></script>
+    <script type="text/javascript" src="js/editor_api.js"></script>
+    <script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
+    <title>权限信息</title>
+</head>
+
+<body>
+<div id="container">
+    <div id="hd">
+    </div>
+    <div id="bd">
+        <form th:action="@{/addPermission}" method="post">
+            <div id="main" style="width: 480px ;margin:0 auto">
+                <h2 class="subfild">
+                    <span>新建权限</span>
+                </h2>
+                <div class="subfild-content base-info">
+                    <div class="kv-item ue-clear">
+                        <label><span class="impInfo">*</span>权限名</label>
+                        <div class="kv-item-content">
+                            <input type="text" class="pname" name="pname" placeholder="请输入权限名"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label><span class="impInfo">*</span>权限值</label>
+                        <div class="kv-item-content">
+                            <input type="text" class="pvalue" name="pvalue" placeholder="请输入权限值"/>
+                            <input style="display: none" type="text" class="pusing" name="pusing" value="Y"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label><span class="impInfo">*</span>描述</label>
+                        <div class="kv-item-content">
+                            <input type="text" class="pdescription" name="pdescription" placeholder="请输入权限描述"/>
+                        </div>
+                    </div>
+                    <div class="buttons">
+                        <input class="button" id="continue" type="submit" value="确认添加"/>
+                        <input class="button" id="cencel" type="button" value="取消"/>
+                    </div>
+                </div>
+        </form>
+    </div>
+</div>
+</body>
+<script type="text/javascript">
+    showRemind('input[type=text],textarea', 'color5');
+    UM.getEditor('content');
+    $('#continue').click(function () {
+
+    });
+    $('#cencel').click(function () {
+        window.location.href = "accountTable";
+    });
+
+</script>
+</html>

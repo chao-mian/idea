@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.AccountMessageMapper">
+    <select id="selectByaMid" resultType="AccountMessage" parameterType="java.lang.String">
+        select * from oa_accountmessage where aMid = #{aMid}
+    </select>
+    <select id="selectByAid" resultType="AccountMessage" parameterType="java.lang.String">
+        select * from oa_accountmessage where aid = #{aid}
+    </select>
+    <select id="selectAll" resultType="AccountMessage" parameterType="java.lang.String">
+        select * from oa_accountmessage
+    </select>
+    <insert id="addAccountMessage" parameterType="AccountMessage">
+        INSERT INTO oa_accountmessage
+        (aMid,aid,aMavatar,aMname,aMIDcard,aMnationality,aMmarriage,aMage,aMsex,aMbirthday,aMentry,aMleave,aMwork,aMmechanism,aMBirthplace,aMeducation,aMpoliticalStatus,aMposition,aMphone,aMaddress)
+        values
+        (#{aMid},#{aid},#{aMavatar},#{aMname},#{aMIDcard},#{aMnationality},#{aMmarriage},#{aMage},#{aMsex},#{aMbirthday},#{aMentry},#{aMleave},#{aMwork},#{aMmechanism},#{aMBirthplace},#{aMeducation},#{aMpoliticalStatus},#{aMposition},#{aMphone},#{aMaddress})
+    </insert>
+    <update id="updateMessage" parameterType="AccountMessage">
+        update oa_accountmessage
+        <set>
+            <if test="aMavatar!=null and aMavatar.length()>0">aMavatar=#{aMavatar},</if>
+            <if test="aMleave!=null and aMleave.length()>0">aMleave=#{aMleave},</if>
+            aid=#{aid},aMname=#{aMname},aMIDcard=#{aMIDcard},aMnationality=#{aMnationality},aMmarriage=#{aMmarriage},aMage=#{aMage},aMsex=#{aMsex},aMbirthday=#{aMbirthday},aMentry=#{aMentry},aMwork=#{aMwork},aMmechanism=#{aMmechanism},aMBirthplace=#{aMBirthplace},aMeducation=#{aMeducation},aMpoliticalStatus=#{aMpoliticalStatus},aMposition=#{aMposition},aMphone=#{aMphone},aMaddress=#{aMaddress}
+        </set>
+        where aMid=#{aMid}
+    </update>
+</mapper>

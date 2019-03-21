@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.PermissionMapper">
+    <select id="selectAll" resultType="Permission">
+        select * from oa_permission
+    </select>
+    <select id="selecrByPid" resultType="Permission">
+        select * from oa_permission where pid = #{pid}
+    </select>
+    <insert id="insert" parameterType="Permission">
+        INSERT INTO oa_permission (pid,pname,pvalue,pusing,pdescription) values
+        (#{pid},#{pname},#{pvalue},#{pusing},#{pdescription})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_permission where pid = #{pid}
+    </delete>
+    <update id="update" parameterType="Permission">
+        update oa_permission set pname = #{pname} , pvalue = #{pvalue}, pusing = #{pusing},pdescription=#{pdescription}
+        where pid=#{pid}
+    </update>
+
+</mapper>

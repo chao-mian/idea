@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.CharacterMapper">
+    <select id="selectAll" resultType="Character">
+        select * from oa_character
+    </select>
+    <select id="selectByCid" resultType="Character">
+        select * from oa_character where cid = #{cid}
+    </select>
+    <select id="selectByCname" resultType="Character">
+        select * from oa_character where cname = #{cname}
+    </select>
+    <insert id="insert" parameterType="Character">
+        INSERT INTO oa_character (cid,cname,cusing) values (#{cid},#{cname},#{cusing})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_character where cid = #{cid}
+    </delete>
+    <update id="update" parameterType="Character">
+        update oa_character set cname = #{cname} ,cusing = #{cusing}
+        where cid=#{cid}
+    </update>
+</mapper>

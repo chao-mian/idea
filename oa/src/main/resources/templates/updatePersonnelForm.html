@@ -1,0 +1,405 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/WdatePicker.css"/>
+    <link rel="stylesheet" type="text/css" href="css/skin_/form.css"/>
+    <link href="umeditor/themes/default/_css/umeditor.css" type="text/css" rel="stylesheet">
+    <!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.0/jquery.min.js"></script>-->
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jquery.select.js"></script>
+    <script type="text/javascript" src="js/WdatePicker.js"></script>
+    <script type="text/javascript">window.UMEDITOR_HOME_URL = 'umeditor/'; // 请换成绝对路径
+    </script>
+    <script type="text/javascript" src="js/umeditor.config.js"></script>
+    <script type="text/javascript" src="js/editor_api.js"></script>
+    <script type="text/javascript" src="umeditor/lang/zh-cn/zh-cn.js"></script>
+    <script language="javascript" type="text/javascript"
+            src="http://www.lmjfy.com/Content/jQuery/jquery-1.7.2.min.js"></script>
+    <title>个人信息</title></head>
+<style type="text/css">
+    #input {
+        width: 150px;
+    }
+
+    #input1 {
+        width: 401px;
+    }
+
+    select {
+        width: 173px !important;
+    }
+
+    #time {
+        width: 167px !important;
+    }
+
+    #view {
+        width: 140px;
+        height: 140px;
+        border-radius: 20px;
+    }</style>
+
+<body>
+<div id="container">
+    <div id="hd"></div>
+    <div id="bd">
+        <form class="form-horizontal" th:action="@{/updateMessage}" enctype="multipart/form-data" method="post">
+            <input type="text" th:value="${accountMessage.aMid}" name="aMid" style="display: none"/>
+            <div id="main" style="width:510px;margin:0 auto;">
+
+                <h2 class="subfild">
+                    <span>个人信息</span></h2>
+                <div class="subfild-content base-info">
+                    <div style="width: 100%;height: 160px; ">
+                        <div style="width: 255px; float: left;">
+                            <div class="kv-item ue-clear">
+                                <label>姓名</label>
+                                <div class="kv-item-content">
+                                    <input id="input" th:value="${accountMessage.aMname}" name="aMname" type="text"
+                                           placeholder="请填写姓名"/>
+                                </div>
+                            </div>
+                            <div class="kv-item ue-clear">
+                                <label>账号</label>
+                                <div class="kv-item-content">
+                                    <input id="input" th:value="${accountMessage.aid}" name="aid" type="text"
+                                           placeholder="请填写OA账号"/>
+                                </div>
+                            </div>
+                            <div class="kv-item ue-clear">
+                                <label>民族</label>
+                                <div class="kv-item-content">
+                                    <input id="input" th:value="${accountMessage.aMnationality}" name="aMnationality"
+                                           type="text" placeholder="请填写民族"/>
+                                </div>
+                            </div>
+                            <div class="kv-item ue-clear">
+                                <label>学历</label>
+                                <div class="kv-item-content">
+                                    <select name="aMeducation" id="aMeducation">
+                                        <!-- <option disabled selected hidden><span
+                                                 th:text="${accountMessage.aMeducation}"></span></option>-->
+                                        <option>专科</option>
+                                        <option>本科</option>
+                                        <option>研究生</option>
+                                        <option>硕士</option>
+                                        <option>博士</option>
+                                    </select>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div style="float: left; width: 255px;">
+                            <div style="width: 140px; margin:0 auto;">
+                                <img th:src="@{'../img/avatar/'+${accountMessage.aMavatar}}"
+                                     class="upload_view" id="view">
+                                <input id="files" type="file" onchange="chan(this)" name="pictureFile"/>
+                                <script>
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label>身份证</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMIDcard}" name="aMIDcard"
+                                   id="input1" class="idNumber" placeholder="请填写身份证号码"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left;">
+                        <label>年龄</label>
+                        <div class="kv-item-content">
+                            <input id="input" th:value="${accountMessage.aMage}" name="aMage" class="age"
+                                   type="text" placeholder="请填写年龄"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label>生日</label>
+                        <div class="kv-item-content">
+                            <input id="time" th:value="${accountMessage.aMbirthday}" name="aMbirthday"
+                                   class="birthday" type="date"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left;">
+                        <label>性别</label>
+                        <div class="kv-item-content">
+                            <select name="aMsex" id="sex">
+                                <!--<option disabled selected hidden><span
+                                        th:text="${accountMessage.aMsex}"></span></option>-->
+                                <option value="男">男</option>
+                                <option value="女">女</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label>籍贯</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMBirthplace}" name="aMBirthplace"
+                                   class="province" id="input" placeholder="请填写籍贯"/>
+                        </div>
+
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left;">
+                        <label>婚姻状况</label>
+                        <div class="kv-item-content">
+                            <select name="aMmarriage" id="aMmarriage">
+                                <!--<option disabled selected hidden><span
+                                        th:text="${accountMessage.aMmarriage}"></span></option>-->
+                                <option>已婚</option>
+                                <option>未婚</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <label>部门</label>
+                        <div class="kv-item-content">
+                            <select name="aMmechanism" id="aMmechanism">
+                                <tr th:each="mechanism:${mechanismList}">
+                                    <option>
+                                        <td th:text="${mechanism.mname}"></td>
+                                    </option>
+                                </tr>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left;">
+                        <label>政治面貌</label>
+                        <div class="kv-item-content">
+                            <select name="aMpoliticalStatus" id="aMpoliticalStatus">
+                                <!--<option  disabled selected hidden><span
+                                        th:text="${accountMessage.aMpoliticalStatus}"></span></option>-->
+                                <option>群众</option>
+                                <option>团员</option>
+                                <option>党员</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div class="kv-item ue-clear">
+                        <label>职位</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMposition}" name="aMposition"
+                                   id="input" placeholder="请填写职位"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left;">
+                        <label>入职时间</label>
+                        <div class="kv-item-content">
+                            <input name="aMentry" th:value="${accountMessage.aMentry}" id="time"
+                                   type="date"/>
+                        </div>
+                    </div>
+
+                    <div class="kv-item ue-clear">
+                        <label>在职状态</label>
+                        <div class="kv-item-content">
+                            <select id="aMwork" name="aMwork">
+                                <!--<option disabled selected hidden><span
+                                        th:text="${accountMessage.aMwork}"></span></option>-->
+                                <option>正职</option>
+                                <option>实习</option>
+                                <option>试用</option>
+                                <option>休假</option>
+                                <option value="离职">离职</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear" style="float: left">
+                        <label>联系方式</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMphone}" name="aMphone"
+                                   id="input" placeholder="请填写联系方式"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
+                        <div class="showaMleave" style="display: none">
+                            <label>离职时间</label>
+                            <div class="kv-item-content">
+                                <input name="aMleave" th:value="${accountMessage.aMleave}" id="time" type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="kv-item ue-clear">
+                        <label>现住址</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMaddress}" name="aMaddress"
+                                   id="input1" placeholder="请填写详细住址"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons">
+                    <input class="button" type="submit" value="确认"/>
+                    <input class="button" id="cencel" type="button" value="取消"/>
+                </div>
+
+            </div>
+
+        </form>
+        <!--form-->
+    </div>
+</div>
+<script th:inline="javascript">
+    var aM = new Array();
+    aM[0] = [[${accountMessage}]];
+    $('#sex').val(aM[0].aMsex);
+    $('#aMeducation').val(aM[0].aMeducation);
+    $('#aMwork').val(aM[0].aMwork);
+    $('#aMmarriage').val(aM[0].aMmarriage);
+    $('#aMpoliticalStatus').val(aM[0].aMpoliticalStatus);
+    $('#aMmechanism').val(aM[0].aMmechanism);
+    // alert(aM[0].aMmechanism);
+
+
+    $("#aMwork").change(function () {
+        if ($('#aMwork').val() == "离职") {
+            $('.showaMleave').show();
+        } else {
+            $('.showaMleave').hide();
+        }
+    });
+
+
+    function chan(i) {
+        var objUrl = getObjectURL(i.files[0]);
+        if (objUrl) {
+            $("#view").attr("src", objUrl);  //这里的id是要显示图片位置的Id
+        }
+    };
+
+    //建立一個可存取到該file的url
+    function getObjectURL(file) {
+        var url = null;
+        // 下面函数执行的效果是一样的，只是需要针对不同的浏览器执行不同的 js 函数而已
+        if (window.createObjectURL != undefined) { // basic
+            url = window.createObjectURL(file);
+        } else if (window.URL != undefined) { // mozilla(firefox)
+            url = window.URL.createObjectURL(file);
+        } else if (window.webkitURL != undefined) { // webkit or chrome
+            url = window.webkitURL.createObjectURL(file);
+        }
+        return url;
+    }
+
+    function getDate(birthday) {
+        var date = eval('new Date(' + birthday.replace(/\d+(?=-[^-]+$)/,
+            function (a) {
+                return parseInt(a, 10) - 1;
+            }).match(/\d+/g) + ')');
+        console.log(date);
+    }
+
+    //给身份证文本框添加一个失去焦点事件：
+    $(".idNumber").blur(function () {
+        //获取身份证号码，例如：412702199301010000，这里不再判断身份证号是否合法
+        var idNumber = $(".idNumber").val();
+        //定义籍贯、出生日期、性别、年龄等变量
+        var provinces, province, birthday, currDate, month, date, age, sex;
+
+        //一、获取籍贯，由于数据量比较大，所以这里只获取到省：
+        //定义地区数组
+        provinces = {
+            11: "北京市",
+            12: "天津市",
+            13: "河北省",
+            14: "山西省",
+            15: "内蒙古",
+            21: "辽宁省",
+            22: "吉林省",
+            23: "黑龙江省",
+            31: "上海市",
+            32: "江苏省",
+            33: "浙江省",
+            34: "安徽省",
+            35: "福建省",
+            36: "江西省",
+            37: "山东省",
+            41: "河南省",
+            42: "湖北省",
+            43: "湖南省",
+            44: "广东省",
+            45: "广西省",
+            46: "海南省",
+            50: "重庆市",
+            51: "四川省",
+            52: "贵州省",
+            53: "云南省",
+            54: "西藏",
+            61: "陕西省",
+            62: "甘肃省",
+            63: "青海省",
+            64: "宁夏",
+            65: "新疆",
+            71: "台湾",
+            81: "香港",
+            82: "澳门",
+            91: "国外"
+        };
+        province = provinces[parseInt(idNumber.substr(0, 2))];
+        //二、获取出生日期
+        birthday = idNumber.substring(6, 10) + "-" + idNumber.substring(10, 12) + "-" + idNumber.substring(12, 14);
+
+        // getDate(birthday);
+
+
+        //三、计算年龄
+        currDate = new Date();
+        month = currDate.getMonth() + 1;
+        date = currDate.getDate();
+        age = currDate.getFullYear() - idNumber.substring(6, 10) - 1;
+        //判断年龄
+        if (idNumber.substring(10, 12) < month || (idNumber.substring(10, 12) == month && idNumber.substring(12, 14) <= date)) {
+            age++;
+        }
+        //四、获取性别
+        if (parseInt(idNumber.substr(16, 1)) % 2 == 1) {
+            //男
+            sex = "男";
+        } else {
+            //女
+            sex = "女";
+        }
+
+        alert(province + getDate(birthday) + age + sex);
+        // //这里假定籍贯是文本框，给籍贯赋值
+        $(".province").val(province);
+        // //给生日文本框赋值
+        $(".birthday").val(birthday);
+        // //给年龄文本框赋值
+        $(".age").val(age);
+        // //给性别单选框赋值
+
+        $('#sex').val(sex);
+        // $("input[name='sex'][type=radio][value='" + sex + "']").attr("checked", true);
+    });
+    $('#cencel').click(function () {
+
+        var amid = new Array();
+        amid[0] = aM[0].aMid;
+        $.ajax({
+            type: "post",
+            url: "jsonamDate",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(amid),
+            success: function (data) {
+                // alert(data);
+                window.location.href = "showPersonnel";
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+
+    });
+
+</script>
+</body>
+
+</html>

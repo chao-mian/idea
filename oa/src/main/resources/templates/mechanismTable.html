@@ -1,0 +1,285 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link rel="stylesheet" type="text/css" href="css/WdatePicker.css"/>
+    <link rel="stylesheet" type="text/css" href="css/skin_/table.css"/>
+    <link rel="stylesheet" type="text/css" href="css/jquery.grid.css"/>
+
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/global.js"></script>
+    <script type="text/javascript" src="js/jquery.select.js"></script>
+    <script type="text/javascript" src="js/core.js"></script>
+    <script type="text/javascript" src="js/jquery.pagination.js"></script>
+    <script type="text/javascript" src="js/jquery.grid.js"></script>
+    <script type="text/javascript" src="js/WdatePicker.js"></script>
+    <script type="text/javascript" src="js/jqAlert2.js"></script>
+    <!--<script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>-->
+    <title>表格</title>
+</head>
+
+<body>
+<span th:if="${flag}!=null">
+<script th:inline="javascript">
+var flag = [[${flag}]];
+alert(flag);
+</script>
+</span>
+<div id="container">
+    <div id="hd"></div>
+    <div id="bd">
+        <div id="main">
+            <div class="search-box ue-clear">
+                <div id="newform" style="display: none">
+                    添加部门信息：
+                    <form th:action="@{/addMechanism}" method="post">
+                        部门名称：<input type="text" name="mname"/>
+                        部门描述：<input type="text" name="mdescription"/>
+                        <input type="submit" value="保存"/>
+                        <input type="button" value="取消" class="cancel"/>
+                    </form>
+                </div>
+                <div id="content" style="display: none">
+                    <div id="updateform">
+                        修改部门信息：
+                        <form th:action="@{/updateMechanism}" method="post">
+                            <input type="text" name="mid" th:value="${mechanism.mid}" style="display: none"/>
+                            部门名称：<input type="text" name="mname" th:value="${mechanism.mname}"/>
+                            部门描述：<input type="text" name="mdescription" th:value="${mechanism.mdescription}"/>
+                            <input type="submit" value="保存"/>
+                            <input type="button" value="取消" class="cancel"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table">
+                <div class="opt ue-clear">
+                	<span class="sortarea">
+                    	<span class="sort">
+                        	<label>排序：</label>
+                            <span class="name">
+                            	<i class="icon"></i>
+                                <span class="text">名称</span>
+                            </span>
+                        </span>
+                        <i class="list"></i>
+                        <i class="card"></i>
+                    </span>
+                    <span class="optarea">
+                        <a href="javascript:;" class="add">
+                            <i class="icon"></i>
+                            <span class="text">添加</span>
+                        </a>
+                        <a class="delete" onclick=>
+                            <i class="icon"></i>
+                            <span class="text">删除</span>
+                        </a>
+
+                        <!--<a href="javascript:;" class="statistics">
+                            <i class="icon"></i>
+                            <span class="text">统计</span>
+                        </a>-->
+                        <a href="javascript:;" class="config">
+                            <i class="icon"></i>
+                            <span class="text">编辑</span>
+                        </a>
+                    </span>
+                </div>
+                <div class="grid"></div>
+                <!--<div class="pagination"></div>-->
+            </div>
+        </div>
+    </div>
+</div>
+<!--<input type="text" th:value="${a}" id = "ah">-->
+</body>
+<script th:inline="javascript">
+    $('select').select();
+    var head = [{
+        label: '部门ID',
+        width: 150,
+        sortable: 'default',
+        name: '部门ID'
+    }
+        , {
+            label: '部门名',
+            width: 200,
+            sortable: 'default',
+            name: 'name'
+        }, {
+            label: '人数',
+            width: 150
+        }, {
+            label: '职能说明',
+            width: 500
+        }/*,{
+				label: '毕业院校',
+				minWidth: 200
+			},{
+				label: '出生日期',
+				width: 120
+			},{
+				label: '是否审核',
+				width:100
+			}*/
+    ];
+    $(".add").on("click", function () {
+        $("#newform").show();//显示
+        $("#content").hide();//隐藏
+    });
+    $(".cancel").on("click", function () {
+        $("#newform").hide();//隐藏
+        $("#content").hide();//隐藏
+    });
+    /*    $(".updatecancel").on("click", function () {
+            alert("??");
+            $("#content").hide();//隐藏
+        });*/
+    $('.config').on('click', function (e) {
+
+        var ids = new Array();
+        ids = $('.grid').Grid('getCheckedIndex');
+        if (ids.length > 1) {
+            alert("请勿选择多条信息");
+            return false;
+        }
+        if (ids.length < 1) {
+            alert("请选择一条要修改的信息");
+            return false;
+        }
+        $("#content").show();//显示
+        $("#newform").hide();//隐藏
+        // alert(ids);
+        // alert(tbady);
+        var mid = new Array();
+        var mname = new Array();
+        for (var i = 0; i < ids.length; i++) {
+            mid[i] = tbody[ids[i]][0];
+            mname[i] = tbody[ids[i]][1];
+            // alert(mid[i]);
+            // alert(mname[i]);
+        }
+        //局部刷新
+        $.ajax({
+            type: "post",
+            url: "jsonMid",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(mid),
+            success: function (data) {
+                // alert(data);
+                $('#updateform').remove();
+                $('#content').load("mechanismTable" + ' #updateform').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+    });
+
+    /*
+        var oper = [{
+            label: '删除', onclick: function () {
+                var te = $('.grid').Grid('getTrs');
+                // for(var i in te){
+                //     alert(te[i]);
+                // }
+                alert(te);
+                /!*for(var i=0;i<data.length;i++){
+                    alert(te[i]);
+                }*!/
+            }
+        }, {
+            label: '编辑', onclick: function () {
+                alert('编辑')
+            }
+        }]*/
+    var aa = [[${list}]];
+    var tbody = new Array();
+    for (var i = 0; i < aa.length; i++) {
+        tbody[i] = [aa[i].mid, aa[i].mname, aa[i].mpeopleNum, aa[i].mdescription];
+    }
+    // alert(tbody);
+    /*var tbody = [
+                       ["201302","uimaker","小牛","山东济南","山东大学","1989-10-18","已审核",oper],
+                       ["201301","admin","熊猫王子","江苏南京","南京林业大学","1982-10-18","已审核",oper]
+       ]*/
+    $('.grid').Grid({
+        thead: head,
+        tbody: tbody,
+        height: 400,
+        checkbox: {
+            single: true
+        }/*,
+        operator: {
+            type: "normal",
+            width: 100
+        }*/,
+        sortCallBack: function (name, index, type) {
+            alert(name + "," + index + ',' + type);
+        }
+    });
+    $(".delete").click(function () {
+        var ids = new Array();
+        ids = $('.grid').Grid('getCheckedIndex');
+        // alert(ids);
+        // alert(tbady);
+        var mid = new Array();
+        var mname = new Array();
+        for (var i = 0; i < ids.length; i++) {
+            mid[i] = tbody[ids[i]][0];
+            mname[i] = tbody[ids[i]][1];
+            // alert(mid[i]);
+            // alert(mname[i]);
+        }
+        if (ids == "") {
+            alert("请选择至少一条数据");
+            return false;
+        }
+        if (!confirm("确定删除" + mname + "吗？")) {
+            return false;
+        }
+        $.ajax({
+            type: "post",
+            url: "jsonMid",
+            contentType: "application/json;charset=utf-8",
+            data: JSON.stringify(mid),
+            success: function (data) {
+                // alert(data);
+                window.location.href = "deleteMechanism";
+            },
+            error: function () {
+                alert("false");
+            }
+        });
+
+
+    });
+    $('.grid').Grid('addLoading');
+    /// 模拟异步
+    setTimeout(function () {
+        $('.grid').Grid('setData', tbody, head);
+    }, 2000)
+
+
+    $('.pagination').pagination(100, {
+        callback: function (page) {
+            alert(page);
+        },
+        display_msg: false
+    });
+
+    $('.search-box input[type=radio]').click(function (e) {
+        if ($(this).prop('checked')) {
+            if ($(this).attr('data-define') === 'define') {
+                $('.define-input').show();
+            } else {
+                $('.define-input').hide();
+            }
+        }
+    });
+</script>
+</html>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.AccountCharacterMapper">
+    <select id="selectAll" resultType="AccountCharacter">
+        select * from oa_account_character
+    </select>
+    <select id="selectByAid" resultType="AccountCharacter">
+        select * from oa_account_character where aid = #{aid}
+    </select>
+    <insert id="insert" parameterType="AccountCharacter">
+        INSERT INTO oa_account_character (acid,aid,cid) values (#{acid},#{aid},#{cid})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_account_character where aid = #{aid}
+    </delete>
+
+</mapper>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.CharacterPermissionMapper">
+    <select id="selectAll" resultType="CharacterPermission">
+        select * from oa_character_permission
+    </select>
+    <select id="selectByCpid" resultType="CharacterPermission">
+        select * from oa_character_permission where cpid = #{cpid}
+    </select>
+    <select id="selectByCid" resultType="CharacterPermission">
+        select * from oa_character_permission where cid = #{cid}
+    </select>
+    <insert id="insert" parameterType="CharacterPermission">
+        INSERT INTO oa_character_permission (cpid,cid,pid) values (#{cpid},#{cid},#{pid})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_character_permission where cid = #{cid}
+    </delete>
+    <update id="update" parameterType="CharacterPermission">
+        update oa_character_permission set cid = #{cid} , pid = #{pid}
+        where cpid=#{cpid}
+    </update>
+</mapper>
