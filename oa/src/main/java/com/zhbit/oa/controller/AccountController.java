@@ -82,27 +82,37 @@ public class AccountController {
     public String login(Account account, Model model, HttpSession session) {
         System.out.println("login输出登录账号" + account);
         model.addAttribute("flag", "success");
-        account = accountService.findOne(account.getAusername());
+
         String status = accountService.login(account);
         if (status.equals("success")) {
             model.addAttribute("flag", "success");
             System.out.println("login输出登录账号数据" + accountMessageService.findByAid(account.getAusername()));
             model.addAttribute("accountMessage", accountMessageService.findByAid(account.getAusername()));
+            account = accountService.findOne(account.getAusername());
             session.setAttribute("loginUser", account);
             return "redirect:/index";
         } else if (status.equals("dongjie")) {
             model.addAttribute("flag", "dongjie");
         } else if (status.equals("false")) {
             model.addAttribute("flag", "false");
+        } else if(status.equals("null")){
+            System.out.println("controller  null");
+            model.addAttribute("flag", "nomessage");
         }
-        return "redirect:/login";
+        return "login";
+    }
+    @RequestMapping(value = "/login")
+    public String login( HttpSession session){
+        session.setAttribute("loginUser", null);
+        return "login";
     }
 
     @RequestMapping(value = "/index")
     public String indexInTo(Model model, HttpServletRequest request, HttpServletResponse response) {
         Account user = (Account) request.getSession().getAttribute("loginUser");
         System.out.println("user不为空" + user);
-        model.addAttribute("accountMessage", accountMessageService.findByAid(user.getAusername()));
+        AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
+        model.addAttribute("accountMessage",accountMessage);
         List<CharacterPermission> listCp = permissionService.findByCidInCp(user.getCid());
 //            String[] str = new String[listCp.size()];
         //将该用户的角色所拥有的权限存在listStr中

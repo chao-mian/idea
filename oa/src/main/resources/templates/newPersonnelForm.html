@@ -274,6 +274,13 @@
     //给身份证文本框添加一个失去焦点事件：
     $(".idNumber").blur(function () {
         //获取身份证号码，例如：412702199301010000，这里不再判断身份证号是否合法
+        var reg = /(^\d{15}$)|(^\d{17}(\d|X)$)/; // 正则表达式
+        var card = $(".idNumber").val();
+        if (reg.test(card) == false) {
+            alert("请输入正确的身份证号码");
+            $(".idNumber").val(null);
+            return false;
+        }
         var idNumber = $(".idNumber").val();
         //定义籍贯、出生日期、性别、年龄等变量
         var provinces, province, birthday, currDate, month, date, age, sex;

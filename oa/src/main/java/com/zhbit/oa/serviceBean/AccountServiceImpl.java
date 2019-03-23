@@ -37,6 +37,9 @@ public class AccountServiceImpl implements AccountService {
         if (account1 != null) {
             if (account1.getAstatus().equals("N")) {
                 return "dongjie";
+            }else if(accountMessageService.findByAid(account.getAusername())==null){
+                System.out.println("service  null");
+                return "null";
             }
             return "success";
         } else {

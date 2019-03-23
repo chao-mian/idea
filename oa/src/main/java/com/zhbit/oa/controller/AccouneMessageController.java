@@ -92,7 +92,8 @@ public class AccouneMessageController {
             // 使用随机生成的字符串   + 原图片的扩展名 组成
 //            String NewFileName = UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf("."));
             // 将图片保存在服务器  （硬盘）
-            pictureFile.transferTo(new File("F:\\ideawork\\oa\\src\\main\\resources\\static\\img\\avatar\\" + fileName));
+//            pictureFile.transferTo(new File("F:\\ideawork\\oa\\src\\main\\resources\\static\\img\\avatar\\" + fileName));
+            pictureFile.transferTo(new File("C:\\avatar\\" + fileName));
             // 将图片的路径保存一份到数据库中（可以用网站显示）
             accountMessage.setaMavatar(fileName);
         }
@@ -112,13 +113,26 @@ public class AccouneMessageController {
         System.out.println("addMessage中输出file==>" + pictureFile);
 
         if (!pictureFile.isEmpty()) {
+            String avatar = accountMessageService.findByaMid(accountMessage.getaMid()).getaMavatar();
+            File file = new File("C:\\avatar\\" + avatar);
+            // 如果文件路径所对应的文件存在，并且是一个文件，则直接删除
+            if (file.exists() && file.isFile()) {
+                if (file.delete()) {
+                    System.out.println("删除单个文件" + avatar + "成功！");
+                } else {
+                    System.out.println("删除单个文件" + avatar + "失败！");
+                }
+            } else {
+                System.out.println("删除单个文件失败：" + avatar + "不存在！");
+            }
             // 获取图片的完整路径
             String fileName = pictureFile.getOriginalFilename();
             System.out.println("路径+++++》" + fileName);
             // 使用随机生成的字符串   + 原图片的扩展名 组成
 //            String NewFileName = UUID.randomUUID().toString() + fileName.substring(fileName.lastIndexOf("."));
             // 将图片保存在服务器  （硬盘）
-            pictureFile.transferTo(new File("F:\\ideawork\\oa\\src\\main\\resources\\static\\img\\avatar\\" + fileName));
+//            pictureFile.transferTo(new File("F:\\ideawork\\oa\\src\\main\\resources\\static\\img\\avatar\\" + fileName));
+            pictureFile.transferTo(new File("C:\\avatar\\" + fileName));
             // 将图片的路径保存一份到数据库中（可以用网站显示）
             accountMessage.setaMavatar(fileName);
         }

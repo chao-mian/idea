@@ -126,7 +126,7 @@
                     <div class="kv-item ue-clear">
                         <label><span class="impInfo">*</span>选择角色</label>
                         <div class="kv-item-content">
-                            <select name="cid">
+                            <select name="cid" class="cid">
                                 <option value="" disabled selected hidden>选择角色</option>
                                 <tr th:each="character:${list}">
                                     <option>
@@ -158,6 +158,9 @@
             return false;
         } else if ($('.repassword').val() != $('.password').val()) {
             alert("两次输入密码不同");
+            return false;
+        }else if($('.cid').val() == null || $('.cid').val() == ""){
+            alert("请选择角色");
             return false;
         }
     });

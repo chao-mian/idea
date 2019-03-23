@@ -93,7 +93,7 @@
             <p class="tips">如果是请点击“确定”，否则点“取消”</p>
 
             <div class="buttons">
-                <input type="button" class="button long2 ok" value="确定"/>
+                <input type="button" class="button long2 ok"value="确定"/>
                 <input type="button" class="button long2 normal" value="取消"/>
             </div>
         </div>
@@ -217,9 +217,10 @@
         $('.exitDialog').Dialog('close');
 
         if ($(this).hasClass('ok')) {
-            window.location.href = "login.html";
+            window.location.href = "login";
         }
     });
+
 
     (function () {
         var totalWidth = 0, current = 1;
