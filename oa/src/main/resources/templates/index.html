@@ -11,14 +11,26 @@
     <script type="text/javascript" src="js/global.js"></script>
     <title>小型企业OA系统</title>
 </head>
-
+<style>
+    #avatar1 {
+        border-radius:50%;
+        width: 40px;
+        height: 40px;
+    }
+</style>
 <body>
 <div id="container">
     <div id="hd">
         <div class="hd-top">
             <h1 class="logo"><!--<a href="javascript:;" class="logo-icon"></a>--></h1>
             <div class="user-info">
-                <!--<a href="javascript:;" class="user-avatar"><span id="avatar" style="background:url(../../img/skin_/userface.png);"><i class="info-num">2</i></span></a>-->
+                <a href="javascript:;" class="user-avatar">
+
+                        <img id="avatar1" th:src="${'avatar/'+accountMessage.getaMavatar()}" alt=""/>
+                    <span id="avatar">
+                        <i class="info-num">2</i>
+                    </span>
+                </a>
                 <span class="user-name" th:text="${accountMessage.getaMname()}"></span>
                 <a href="javascript:;" class="more-info"></a>
             </div>
@@ -93,7 +105,7 @@
             <p class="tips">如果是请点击“确定”，否则点“取消”</p>
 
             <div class="buttons">
-                <input type="button" class="button long2 ok"value="确定"/>
+                <input type="button" class="button long2 ok" value="确定"/>
                 <input type="button" class="button long2 normal" value="取消"/>
             </div>
         </div>
@@ -182,8 +194,8 @@
         }
     }
 
-    $('#avatar').css("background", "url(../img/avatar/" + message.aMavatar + ")");
-    $('.user-avatar').css("background", "url(../img/avatar/" + message.aMavatar + ")");
+    // $('#avatar').css("background", "url(avatar/" + message.aMavatar + ")");
+    // $('.user-avatar').css("background", "url(avatar/" + message.aMavatar + ")");
     $("#bd").height($(window).height() - $("#hd").outerHeight() - 26);
 
     $(window).resize(function (e) {
