@@ -1,9 +1,12 @@
 package com.zhbit.oa.serviceBean;
 
+import com.zhbit.oa.dao.AccountMapper;
 import com.zhbit.oa.dao.AccountMessageMapper;
+import com.zhbit.oa.domain.Account;
 import com.zhbit.oa.domain.AccountMessage;
 import com.zhbit.oa.domain.Mechanism;
 import com.zhbit.oa.service.AccountMessageService;
+import com.zhbit.oa.service.AccountService;
 import com.zhbit.oa.service.MechanismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,10 @@ public class AccountMessageServiceImpl implements AccountMessageService {
 
     @Autowired
     private AccountMessageMapper accountMessageMapper;
+    @Autowired
+    private AccountMapper accountMapper;
+    @Autowired
+    private AccountService accountService;
     @Autowired
     private MechanismService mechanismService;
 
@@ -70,7 +77,17 @@ public class AccountMessageServiceImpl implements AccountMessageService {
     //更新
     public boolean updateMessage(AccountMessage accountMessage) {
         accountMessage.setaMmechanism(mechanismService.findByMname(accountMessage.getaMmechanism()).getMid());
-        accountMessageMapper.updateMessage(accountMessage);
+        if(accountMessage.getaMwork().equals("离职")){
+            Account account = accountService.findOne(accountMessage.getAid());
+            account.setAstatus("N");
+            accountMapper.updateAccount(account);
+            accountMessageMapper.updateMessage(accountMessage);
+        }else {
+            Account account = accountService.findOne(accountMessage.getAid());
+            account.setAstatus("Y");
+            accountMapper.updateAccount(account);
+            accountMessageMapper.updateMessage(accountMessage);
+        }
         return true;
     }
 
