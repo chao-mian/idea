@@ -89,6 +89,7 @@ public class AccountController {
             System.out.println("login输出登录账号数据" + accountMessageService.findByAid(account.getAusername()));
             model.addAttribute("accountMessage", accountMessageService.findByAid(account.getAusername()));
             account = accountService.findOne(account.getAusername());
+//            session.setMaxInactiveInterval(3600);
             session.setAttribute("loginUser", account);
             return "redirect:/index";
         } else if (status.equals("dongjie")) {
