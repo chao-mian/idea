@@ -434,9 +434,12 @@
     $(".aMname").blur(function () {
         if ($(".aMname").val() == null || $(".aMname").val() == "") {
             return false;
-        }else if (isChinaName($.trim($(".aMname").val())) == false) {
-            alert("姓名不合法");
-            $(".aMphone").val(null);
+        }
+        var reg = /^[\u4E00-\u9FA5]{1,6}$/;
+        var card = $(".aMname").val();
+        if (reg.test(card) == false) {
+            alert("输入姓名不合法");
+            $(".aMname").val(null);
             return false;
         }
     });
