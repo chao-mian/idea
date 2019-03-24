@@ -43,7 +43,29 @@
         width: 140px;
         height: 140px;
         border-radius: 20px;
-    }</style>
+    }
+
+    #filesdiv {
+        width: 140px;
+        margin: 0 auto;
+        /*background-color: #00B83F;*/
+        /*background:url('img/touxiang.jpg');*/
+        position:relative;
+    }
+
+    #files {
+        height: 140px;
+        width: 140px;
+        overflow: hidden;
+        font-size: 300px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        opacity: 0;
+        filter: alpha(opacity=0);
+        cursor: pointer;
+    }
+</style>
 
 <body>
 <div id="container">
@@ -97,12 +119,9 @@
                             </div>
                         </div>
                         <div style="float: left; width: 255px;">
-                            <div style="width: 140px; margin:0 auto;">
-                                <img src="../img/touxiang.jpg" class="upload_view" id="view">
+                            <div id="filesdiv">
                                 <input id="files" type="file" onchange="chan(this)" name="pictureFile"/>
-                                <!--<div style="margin: 0 auto;"><label >头像</label></div>-->
-                                <script>
-                                </script>
+                                <img src="../img/touxiang.jpg" class="upload_view" id="view">
                             </div>
                         </div>
                     </div>
