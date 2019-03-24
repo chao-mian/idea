@@ -19,6 +19,7 @@ public class AccountMessage {
     private String aMpoliticalStatus;
     private String aMposition;
     private String aMphone;
+    private String aMemail;
     private String aMaddress;
     private String aMentry;
     private String aMleave;
@@ -244,9 +245,16 @@ public class AccountMessage {
         this.aMwork = aMwork;
     }
 
+    public String getaMemail() {
+        return aMemail;
+    }
+
+    public void setaMemail(String aMemail) {
+        this.aMemail = aMemail;
+    }
+
     @Override
     public String toString() {
-
         return "AccountMessage{" +
                 "aMid='" + aMid + '\'' +
                 ", aid='" + aid + '\'' +
@@ -264,6 +272,7 @@ public class AccountMessage {
                 ", aMpoliticalStatus='" + aMpoliticalStatus + '\'' +
                 ", aMposition='" + aMposition + '\'' +
                 ", aMphone='" + aMphone + '\'' +
+                ", aMemail='" + aMemail + '\'' +
                 ", aMaddress='" + aMaddress + '\'' +
                 ", aMentry='" + aMentry + '\'' +
                 ", aMleave='" + aMleave + '\'' +

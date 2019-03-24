@@ -44,12 +44,13 @@
         height: 140px;
         border-radius: 20px;
     }
+
     #filesdiv {
         width: 140px;
         margin: 0 auto;
         /*background-color: #00B83F;*/
         /*background:url('img/touxiang.jpg');*/
-        position:relative;
+        position: relative;
     }
 
     #files {
@@ -119,7 +120,7 @@
                         <div style="float: left; width: 255px;">
                             <div id="filesdiv">
                                 <input id="files" type="file" onchange="chan(this)" name="pictureFile"/>
-                                <img src="../img/touxiang.jpg" class="upload_view" id="view">
+                                <img th:src="@{'avatar/'+${accountMessage.aMavatar}}" class="upload_view" id="view">
                             </div>
                         </div>
                     </div>
@@ -237,10 +238,18 @@
                         </div>
                     </div>
                     <div class="kv-item ue-clear">
+                        <label>邮箱</label>
+                        <div class="kv-item-content">
+                            <input type="text" th:value="${accountMessage.aMemail}" name="aMemail"
+                                   id="input" placeholder="请填写邮箱"/>
+                        </div>
+                    </div>
+                    <div class="kv-item ue-clear">
                         <div class="showaMleave" style="display: none">
                             <label>离职时间</label>
                             <div class="kv-item-content">
-                                <input name="aMleave" th:value="${accountMessage.aMleave}" id="time" type="date"/>
+                                <input name="aMleave" th:value="${accountMessage.aMleave}" id="time" class="aMleave"
+                                       type="date"/>
                             </div>
                         </div>
                     </div>
@@ -274,10 +283,25 @@
     $('#aMpoliticalStatus').val(aM[0].aMpoliticalStatus);
     $('#aMmechanism').val(aM[0].aMmechanism);
     // alert(aM[0].aMmechanism);
-
+    if ($('#aMwork').val() == "离职") {
+        $('.showaMleave').show();
+    }
 
     $("#aMwork").change(function () {
         if ($('#aMwork').val() == "离职") {
+            var myDate = new Date();
+            //获取当前年
+            var year = myDate.getFullYear();
+//获取当前月
+            var month = myDate.getMonth() + 1;
+
+            month = (month < 10 ? "0" + month : month);  //10月以下的月份自动加0
+//获取当前日
+            var date = myDate.getDate();
+            var now = year + '-' + month + "-" + date;
+            // alert(now);
+            $('.aMleave').val(now);
+            // alert($('.aMleave').val());
             $('.showaMleave').show();
         } else {
             $('.showaMleave').hide();
@@ -385,7 +409,7 @@
             sex = "女";
         }
 
-        alert(province + getDate(birthday) + age + sex);
+        // alert(province + getDate(birthday) + age + sex);
         // //这里假定籍贯是文本框，给籍贯赋值
         $(".province").val(province);
         // //给生日文本框赋值

@@ -158,6 +158,12 @@
                     </div>
                 </div>
                 <div class="kv-item ue-clear">
+                    <label>邮箱</label>
+                    <div class="kv-item-content">
+                        <span id="input" th:text="${accountMessage.aMemail}"></span>
+                    </div>
+                </div>
+                <div class="kv-item ue-clear">
                         <span th:if="${accountMessage.aMwork}=='离职'">
                         <div class="showaMleave">
                             <label>离职时间</label>
