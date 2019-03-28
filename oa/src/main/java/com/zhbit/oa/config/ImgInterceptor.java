@@ -1,4 +1,4 @@
-package com.zhbit.oa.config.intercepors;
+package com.zhbit.oa.config;
 
 
 import org.springframework.context.annotation.Configuration;
