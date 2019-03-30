@@ -1,7 +1,7 @@
 package com.zhbit.oa.controller;
 
 import com.zhbit.oa.domain.Account;
-import com.zhbit.oa.domain.Test;
+import com.zhbit.oa.domain.LayuiJson;
 import com.zhbit.oa.service.AccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,13 +19,13 @@ public class TestController {
 
     @ResponseBody
     @RequestMapping(value = "/testDemo")
-    public Test TestDemo() {
+    public LayuiJson TestDemo() {
         List<Account> list = accountService.findAll();
-        Test test = new Test();
+        LayuiJson test = new LayuiJson();
         test.setCode("0");
         test.setMsg("成功");
         test.setCount(String.valueOf(list.size()));
-        test.setData(list);
+//        test.setData(list);
         return test;
     }
 }

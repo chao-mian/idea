@@ -3,20 +3,20 @@ layui.use('table', function(){
 
     table.render({
         elem: '#test'
-        ,url:'/testDemo'
+        ,url:'/getProcesses'
         ,toolbar: '#toolbarDemo'
-        ,title: '用户数据表'
+        ,title: '流程列表'
         ,cols: [[
             {type: 'checkbox', fixed: 'left'}
-            ,{field:'aid', title:'aid', width:120,  sort: true}
-            ,{field:'cid', title:'cid', width:120,  sort: true}
+            ,{field:'processesName', title:'请求标题', width:200,  sort: true}
+            ,{field:'processesStartUser', title:'创建人', width:200,  sort: true}
             /*,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
                     return '<em>'+ res.email +'</em>'
                 }}*/
-            ,{field:'ausername', title:'账号',width:120,  sort: true}
-            ,{field:'apassword', title:'密码', width:120,  sort: true}
-            ,{field:'astatus', title:'状态',width:120,  sort: true}
-            /*,{field:'experience', title:'积分', width:80, sort: true}
+            ,{field:'processesStartTime', title:'创建时间',width:200,  sort: true}
+            ,{field:'processesTask', title:'当前节点', width:200,  sort: true}
+            /*,{field:'astatus', title:'状态',width:120,  sort: true}
+            ,{field:'experience', title:'积分', width:80, sort: true}
             ,{field:'ip', title:'IP', width:120}
             ,{field:'logins', title:'登入次数', width:100, sort: true}
             ,{field:'joinTime', title:'加入时间', width:120}*/

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" xmlns:tns="http://www.activiti.org/test" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" expressionLanguage="http://www.w3.org/1999/XPath" id="m1553771554494" name="" targetNamespace="http://www.activiti.org/test" typeLanguage="http://www.w3.org/2001/XMLSchema">
+  <process id="leave" isClosed="false" isExecutable="true" name="请假申请" processType="None">
+    <startEvent activiti:formKey="processes/leave/start.form" id="leave_start" name="StartEvent"/>
+    <userTask activiti:exclusive="true" activiti:formKey="processes/leave/leader.form" id="leave_leaderApproval" name="领导审批"/>
+    <userTask activiti:exclusive="true" activiti:formKey="processes/leave/hr.form" id="leave_hrApproval" name="人事审批"/>
+    <endEvent id="leave_end" name="EndEvent"/>
+    <sequenceFlow id="_6" sourceRef="leave_start" targetRef="leave_leaderApproval"/>
+    <sequenceFlow id="_7" sourceRef="leave_leaderApproval" targetRef="leave_hrApproval">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${leaderApproval=='true'}]]></conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="_8" sourceRef="leave_hrApproval" targetRef="leave_end"/>
+    <sequenceFlow id="_9" sourceRef="leave_leaderApproval" targetRef="leave_end">
+      <conditionExpression xsi:type="tFormalExpression"><![CDATA[${leaderApproval=='false'}]]></conditionExpression>
+    </sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
+    <bpmndi:BPMNPlane bpmnElement="leave">
+      <bpmndi:BPMNShape bpmnElement="leave_start" id="Shape-leave_start">
+        <omgdc:Bounds height="32.0" width="32.0" x="255.0" y="50.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leave_leaderApproval" id="Shape-leave_leaderApproval">
+        <omgdc:Bounds height="55.0" width="85.0" x="255.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leave_hrApproval" id="Shape-leave_hrApproval">
+        <omgdc:Bounds height="55.0" width="85.0" x="230.0" y="265.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="leave_end" id="Shape-leave_end">
+        <omgdc:Bounds height="32.0" width="32.0" x="255.0" y="385.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="_6" id="BPMNEdge__6" sourceElement="leave_start" targetElement="leave_leaderApproval">
+        <omgdi:waypoint x="271.0" y="82.0"/>
+        <omgdi:waypoint x="271.0" y="160.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_7" id="BPMNEdge__7" sourceElement="leave_leaderApproval" targetElement="leave_hrApproval">
+        <omgdi:waypoint x="285.0" y="215.0"/>
+        <omgdi:waypoint x="285.0" y="265.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_8" id="BPMNEdge__8" sourceElement="leave_hrApproval" targetElement="leave_end">
+        <omgdi:waypoint x="271.0" y="320.0"/>
+        <omgdi:waypoint x="271.0" y="385.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_9" id="BPMNEdge__9" sourceElement="leave_leaderApproval" targetElement="leave_end">
+        <omgdi:waypoint x="340.0" y="187.5"/>
+        <omgdi:waypoint x="410.0" y="305.0"/>
+        <omgdi:waypoint x="287.0" y="401.0"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

@@ -265,7 +265,7 @@ var utils = UM.utils = {
      * @example
      * //指定加载到当前document中一个script文件，加载成功后执行function
      * utils.loadFile( document, {
-     *     src:"test.js",
+     *     src:"showProcesses.js",
      *     tag:"script",
      *     type:"text/javascript",
      *     defer:"defer"

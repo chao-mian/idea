@@ -2,11 +2,11 @@ package com.zhbit.oa.domain;
 
 import java.util.List;
 
-public class Test {
+public class LayuiJson {
     private String code;
     private String msg;
     private String count;
-    private List<Account> data;
+    private List<Processes> data;
 
     public String getCode() {
         return code;
@@ -32,17 +32,17 @@ public class Test {
         this.count = count;
     }
 
-    public List<Account> getData() {
+    public List<Processes> getData() {
         return data;
     }
 
-    public void setData(List<Account> data) {
+    public void setData(List<Processes> data) {
         this.data = data;
     }
 
     @Override
     public String toString() {
-        return "Test{" +
+        return "LayuiJson{" +
                 "code='" + code + '\'' +
                 ", msg='" + msg + '\'' +
                 ", count='" + count + '\'' +
