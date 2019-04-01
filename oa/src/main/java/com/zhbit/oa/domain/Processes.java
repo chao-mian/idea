@@ -1,10 +1,20 @@
 package com.zhbit.oa.domain;
 
 public class Processes {
+    String processesDefinitionId;
     String processesName;
     String processesStartUser;
     String processesStartTime;
     String processesTask;
+
+
+    public String getProcessesDefinitionId() {
+        return processesDefinitionId;
+    }
+
+    public void setProcessesDefinitionId(String processesDefinitionId) {
+        this.processesDefinitionId = processesDefinitionId;
+    }
 
     public String getProcessesName() {
         return processesName;
@@ -41,7 +51,8 @@ public class Processes {
     @Override
     public String toString() {
         return "Processes{" +
-                "processesName='" + processesName + '\'' +
+                "processesDefinitionId='" + processesDefinitionId + '\'' +
+                ", processesName='" + processesName + '\'' +
                 ", processesStartUser='" + processesStartUser + '\'' +
                 ", processesStartTime='" + processesStartTime + '\'' +
                 ", processesTask='" + processesTask + '\'' +

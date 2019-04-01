@@ -14,7 +14,7 @@
 </fieldset>
 <form class="layui-form" th:action="@{/Shenpi}" method="post">
 <div id="backHtml" style="width: 50%"></div>
-
+<input type="text" name="processDefinitionId" th:value="${processDefinitionId}" style="display: none">
     <div class="layui-form-item">
         <div class="layui-input-block">
             <button class="layui-btn" lay-submit="" lay-filter="demo1">审批</button>

@@ -9,6 +9,12 @@ public class Leave {
     private String endDate;
     private String reason;
     private String leaveType;
+    private String leaderOpinion;
+    private String leaderApproval;
+    private String hrOpinion;
+    private String hrApproval;
+    private String leaderAssignee;
+    private String hrAssignee;
 
     public String getName() {
         return name;
@@ -74,6 +80,54 @@ public class Leave {
         this.leaveType = leaveType;
     }
 
+    public String getLeaderAssignee() {
+        return leaderAssignee;
+    }
+
+    public void setLeaderAssignee(String leaderAssignee) {
+        this.leaderAssignee = leaderAssignee;
+    }
+
+    public String getHrAssignee() {
+        return hrAssignee;
+    }
+
+    public void setHrAssignee(String hrAssignee) {
+        this.hrAssignee = hrAssignee;
+    }
+
+    public String getLeaderOpinion() {
+        return leaderOpinion;
+    }
+
+    public void setLeaderOpinion(String leaderOpinion) {
+        this.leaderOpinion = leaderOpinion;
+    }
+
+    public String getLeaderApproval() {
+        return leaderApproval;
+    }
+
+    public void setLeaderApproval(String leaderApproval) {
+        this.leaderApproval = leaderApproval;
+    }
+
+    public String getHrOpinion() {
+        return hrOpinion;
+    }
+
+    public void setHrOpinion(String hrOpinion) {
+        this.hrOpinion = hrOpinion;
+    }
+
+    public String getHrApproval() {
+        return hrApproval;
+    }
+
+    public void setHrApproval(String hrApproval) {
+        this.hrApproval = hrApproval;
+    }
+
     @Override
     public String toString() {
         return "Leave{" +
@@ -85,6 +139,12 @@ public class Leave {
                 ", endDate='" + endDate + '\'' +
                 ", reason='" + reason + '\'' +
                 ", leaveType='" + leaveType + '\'' +
+                ", leaderOpinion='" + leaderOpinion + '\'' +
+                ", leaderApproval='" + leaderApproval + '\'' +
+                ", hrOpinion='" + hrOpinion + '\'' +
+                ", hrApproval='" + hrApproval + '\'' +
+                ", leaderAssignee='" + leaderAssignee + '\'' +
+                ", hrAssignee='" + hrAssignee + '\'' +
                 '}';
     }
 }

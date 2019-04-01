@@ -14,21 +14,128 @@
 </fieldset>
 
 <form class="layui-form" th:action="@{/StartForm}" method="post">
-<div id="backHtml" style="width: 50%"></div>
-<div class="layui-form-item">
-    <div class="layui-input-block">
-        <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
-        <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    <div id="backHtml" style="width: 700px">
+        <div class="layui-form-item">
+            <label class="layui-form-label">申&nbsp;请&nbsp;人</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="" autocomplete="off" placeholder="请输入申请人姓名"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</label>
+            <div class="layui-input-block">
+                <input type="text" name="zhiwei" lay-verify="" autocomplete="off" placeholder="请输入职位"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">部&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;门</label>
+                <div class="layui-input-inline">
+                    <select id="mechanism" name="bumen" lay-verify="required" lay-search="">
+                        <option value="">直接选择或搜索选择</option>
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">申&nbsp;请&nbsp;日&nbsp;期</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="Date" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="layui-form-item">
+
+            <div class="layui-inline">
+                <label class="layui-form-label">请假时间起</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="startDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">请假时间止</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="endDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                           autocomplete="off" class="layui-input">
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">请假类型</label>
+            <div class="layui-input-inline">
+                <select name="leaveType" lay-verify="required">
+                    <option value="">直接选择或搜索选择</option>
+                    <option value="事假">事假</option>
+                    <option value="病假">病假</option>
+                    <option value="公休">公休</option>
+                    <option value="产假">产假</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-inline">
+                <label class="layui-form-label">审批领导</label>
+                <div class="layui-input-inline">
+                    <select id="leader" name="leaderAssignee" lay-verify="required" lay-search="">
+                        <option value="">直接选择或搜索选择</option>
+
+                    </select>
+                </div>
+            </div>
+            <div class="layui-inline">
+                <label class="layui-form-label">审批人事</label>
+                <div class="layui-input-inline">
+                    <select id="hr" name="hrAssignee" lay-verify="required" lay-search="">
+                        <option value="">直接选择或搜索选择</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">请假事由</label>
+            <div class="layui-input-block">
+                <textarea placeholder="请输入内容" name="reason" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <!--<div class="layui-form-item layui-form-text">
+          <label class="layui-form-label">编辑器</label>
+          <div class="layui-input-block">
+            <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
+          </div>
+        </div>-->
+
+
     </div>
-</div>
+    <div class="layui-form-item">
+        <div class="layui-input-block">
+            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+        </div>
+    </div>
 </form>
 
 </body>
 <script type="text/javascript" th:inline="javascript">
-    var form = [[${form}]];
-    $('#backHtml').append(form);
-
-
+    /*var form = [[${form}]];
+    $('#backHtml').append(form);*/
+    var mechanismList = [[${mechanismList}]];
+    var leaderList = [[${leaderList}]];
+    var hrlist = [[${hrlist}]];
+    for (var i = 0; i < mechanismList.length; i++) {
+        $("#mechanism").append("<option value='" + mechanismList[i].mname + "'>" + mechanismList[i].mname + "</option>");
+    }
+    for (var i = 0; i < leaderList.length; i++) {
+        $("#leader").append("<option value='" + leaderList[i].aMname + "'>" + leaderList[i].aMname + "</option>");
+    }
+    for (var i = 0; i < hrlist.length; i++) {
+        $("#hr").append("<option value='" + hrlist[i].aMname + "'>" + hrlist[i].aMname + "</option>");
+    }
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
             , layer = layui.layer

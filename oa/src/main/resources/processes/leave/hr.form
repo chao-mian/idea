@@ -70,16 +70,9 @@
       <div class="layui-input-inline">
         <select name="hrApproval" lay-verify="required">
           <option value="">直接选择或搜索选择</option>
-          <option value="true">同意</option>
-          <option value="false">不同意</option>	
+          <option value="同意">同意</option>
+          <option value="不同意">不同意</option>	
         </select>
       </div>
   </div>
-
-  <!--<div class="layui-form-item layui-form-text">
-    <label class="layui-form-label">编辑器</label>
-    <div class="layui-input-block">
-      <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
-    </div>
-  </div>-->
 
