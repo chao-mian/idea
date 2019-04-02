@@ -114,6 +114,20 @@ public class LeaveController {
         // 启动流程
 //        variables.put("leave", leave);
 
+        AccountMessage accountMessage = accountMessageService.findByAMname(leave.getName());
+
+        if(accountMessage==null){
+            model.addAttribute("flag","申请人不存在，申请失败！");
+            return "forward:/start";
+        }else{
+            accountMessage.setaMmechanism(mechanismService.findOne(accountMessage.getaMmechanism()).getMname());
+            if(!leave.getBumen().equals(accountMessage.getaMmechanism())
+                    ||!leave.getZhiwei().equals(accountMessage.getaMposition())){
+
+                model.addAttribute("flag","申请人职位或所在部门不对应，申请失败！");
+                return "forward:/start";
+            }
+        }
         DeploymentBuilder builder = repositoryService.createDeployment();
         builder.addClasspathResource("processes/leave/leave.bpmn");
         builder.addClasspathResource("processes/leave/hr.form");
@@ -183,7 +197,7 @@ public class LeaveController {
         return "forward:/showToDoProcesses";
     }
 
-    //领导办理流程页面
+    //人事办理流程页面
     @RequestMapping(value = "/hrApprovalForm")
     public String HrApproval(Model model) {
         Task deptLeaderTask = taskService.createTaskQuery().processDefinitionId(processDefinitionId).singleResult();

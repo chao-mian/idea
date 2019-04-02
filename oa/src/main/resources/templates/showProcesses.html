@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -20,11 +19,14 @@ alert(flag);
 </script>
 </span>
 <div class="demoTable">
-    搜索ID：
-    <div class="layui-inline">
-        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    <div class="layui-form-item">
+        <br>搜索：
+        <div class="layui-inline">
+            <input class="layui-input" name="id" id="demoReload" autocomplete="off"
+                   placeholder="请输入关键词">
+        </div>
+        <button class="layui-btn" data-type="reload" style="background-color:#138FC9">搜索</button>
     </div>
-    <button class="layui-btn" data-type="reload">搜索</button>
 </div>
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
@@ -39,7 +41,7 @@ alert(flag);
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detail" style="background-color: #1E9FFF"
        data-method="offset" data-type="auto">查看</a>
-    <a class="layui-btn layui-btn-xs" lay-event="edit">办理</a>
+    <a class="layui-btn layui-btn-xs" lay-event="edit" style="background-color: #1E9FFF">办理</a>
     <!--<a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>-->
 </script>
 
@@ -47,78 +49,83 @@ alert(flag);
 </body>
 <script type="text/javascript" th:inline="javascript">
     var url = [[${url}]];
-    layui.use('table', function(){
+    layui.use('table', function () {
         var table = layui.table;
         table.render({
             elem: '#test'
-            ,url:url
-            ,toolbar: '#toolbarDemo'
-            ,title: '流程列表'
-            ,cols: [[
+            , url: url
+            , toolbar: '#toolbarDemo'
+            , title: '流程列表'
+            , cols: [[
                 {type: 'checkbox', fixed: 'left'}
-                ,{field:'processesDefinitionId', title:'流程ID', width:180,  sort: true}
-                ,{field:'processesName', title:'请求标题', width:180,  sort: true}
-                ,{field:'processesStartUser', title:'创建人', width:180,  sort: true}
+                , {field: 'processesDefinitionId', title: '流程ID', width: 180, sort: true}
+                , {field: 'processesName', title: '请求标题', width: 180, sort: true}
+                , {field: 'processesStartUser', title: '创建人', width: 180, sort: true}
                 /*,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
                         return '<em>'+ res.email +'</em>'
                     }}*/
-                ,{field:'processesStartTime', title:'创建时间',width:180,  sort: true}
-                ,{field:'processesTask', title:'流程状态', width:180,  sort: true}
+                , {field: 'processesStartTime', title: '创建时间', width: 180, sort: true}
+                , {field: 'processesTask', title: '流程状态', width: 180, sort: true}
                 /*,{field:'astatus', title:'状态',width:120,  sort: true}
                 ,{field:'experience', title:'积分', width:80, sort: true}
                 ,{field:'ip', title:'IP', width:120}
                 ,{field:'logins', title:'登入次数', width:100, sort: true}
                 ,{field:'joinTime', title:'加入时间', width:120}*/
-                ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
             ]]
-            ,page: true
+            , page: true
             // ,limit:10
         });
         var $ = layui.$, active = {
-            reload: function(){
+            reload: function () {
                 var demoReload = $('#demoReload');
 
                 //执行重载
-                table.reload('testReload', {
+                table.reload('test', {
                     page: {
                         curr: 1 //重新从第 1 页开始
                     }
-                    ,where: {
-                        key: {
-                            processesTask: demoReload.val()
-                        }
+                    , where: {
+                        inquire: demoReload.val()
                     }
                 });
             }
         };
 
-      /*  var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
-        console.log(checkStatus.data) //获取选中行的数据
-        console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
-        console.log(checkStatus.isAll ) //表格是否全选*/
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        /*  var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
+          console.log(checkStatus.data) //获取选中行的数据
+          console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+          console.log(checkStatus.isAll ) //表格是否全选*/
         //头工具栏事件
-        table.on('toolbar(test)', function(obj){
+        table.on('toolbar(test)', function (obj) {
             var checkStatus = table.checkStatus(obj.config.id);
-            switch(obj.event){
+            switch (obj.event) {
                 case 'getCheckData':
                     var data = checkStatus.data;
                     layer.alert(JSON.stringify(data));
                     break;
                 case 'getCheckLength':
                     var data = checkStatus.data;
-                    layer.msg('选中了：'+ data.length + ' 个');
+                    layer.msg('选中了：' + data.length + ' 个');
                     break;
                 case 'isAll':
-                    layer.msg(checkStatus.isAll ? '全选': '未全选');
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
                     break;
-            };
+            }
+            ;
         });
 
         //监听行工具事件
-        table.on('tool(test)', function(obj){
+        table.on('tool(test)', function (obj) {
             var data = obj.data;
             //console.log(obj)
-            if(obj.event === 'detail'){ //查看
+            if (obj.event === 'detail') { //查看
                 console.log(data);
                 // alert(data.processesDefinitionId);
                 $.ajax({
@@ -140,18 +147,23 @@ alert(flag);
                         alert("false");
                     }
                 });
-            } else if(obj.event === 'del'){
-                layer.confirm('真的删除行么', function(index){
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
                     obj.del();
                     layer.close(index);
                 });
-            } else if(obj.event === 'edit'){
-                if(data.processesTask=="结束"){
+            } else if (obj.event === 'edit') {
+                if (data.processesTask == "结束") {
                     layer.open({
                         title: '提示',
                         content: '该流程已结束，无需办理' //这里content是一个普通的String
                     });
-                }else {
+                } else if (url != "/getToDoProcesses") {
+                    layer.open({
+                        title: '提示',
+                        content: '您无权办理该流程哦！' //这里content是一个普通的String
+                    });
+                } else {
                     $.ajax({
                         type: "post",
                         url: "jsonProcessDefinitionId",

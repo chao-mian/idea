@@ -37,13 +37,13 @@ public class ProcessesServiceImpl implements ProcessesService {
             for (int i = 0; i < list.size(); i++) {
 //            for (HistoricActivityInstance hpi : list) {
                 Processes processes = new Processes();
-                System.out.println("流程定义ID：" + list.get(i).getProcessDefinitionId());
+                /*System.out.println("流程定义ID：" + list.get(i).getProcessDefinitionId());
                 System.out.println("流程实例ID：" + list.get(i).getId());
                 System.out.println("流程名：" + repositoryService.createProcessDefinitionQuery().processDefinitionId(list.get(i).getProcessDefinitionId()).singleResult().getName());
                 System.out.println("开始时间：" + list.get(i).getStartTime());
                 System.out.println("结束时间：" + list.get(i).getEndTime());
                 System.out.println("流程持续时间：" + list.get(i).getDurationInMillis());
-                System.out.println("流程创建人：" + list.get(i).getStartUserId());
+                System.out.println("流程创建人：" + list.get(i).getStartUserId());*/
                 if (taskService.createTaskQuery().processInstanceId(list.get(i).getId()).singleResult() != null) {
                     System.out.println(taskService.createTaskQuery().processInstanceId(list.get(i).getId()).singleResult().getName());
                     processes.setProcessesTask(taskService.createTaskQuery().processDefinitionId(list.get(i).getProcessDefinitionId()).singleResult().getName());
@@ -73,7 +73,7 @@ public class ProcessesServiceImpl implements ProcessesService {
         if (list != null && list.size() > 0) {
             for (int i = 0; i < list.size(); i++) {
                 Processes processes = new Processes();
-                System.out.println("历史活动");
+                /*System.out.println("历史活动");
                 System.out.println("流程定义ID：" + list.get(i).getProcessDefinitionId());
                 System.out.println("流程实例ID：" + list.get(i).getId());
                 System.out.println("流程名：" + list.get(i).getActivityName());
@@ -81,11 +81,9 @@ public class ProcessesServiceImpl implements ProcessesService {
                 System.out.println("结束时间：" + list.get(i).getEndTime());
                 System.out.println("流程持续时间：" + list.get(i).getDurationInMillis());
                 System.out.println("流程节点id：" + list.get(i).getTaskId());
-
                 System.out.println("流程操作者：" + list.get(i).getAssignee());
-                System.out.println("=======================================");
-
-                if (!list.get(i).getActivityName().equals("StartEvent")&&!list.get(i).getActivityName().equals("EndEvent")) {
+                System.out.println("=======================================");*/
+                if (!list.get(i).getActivityName().equals("StartEvent") && !list.get(i).getActivityName().equals("EndEvent")) {
                     if (list.get(i).getEndTime() != null && list.get(i).getAssignee().equals(username)) {
                         HistoricProcessInstance historicProcessInstance = historyService
                                 .createHistoricProcessInstanceQuery().processDefinitionId(list.get(i).getProcessDefinitionId()).singleResult();
@@ -107,6 +105,43 @@ public class ProcessesServiceImpl implements ProcessesService {
             }
         }
         System.out.println("processesService中输出activitylist-----" + processesList);
+        return processesList;
+    }
+
+    //分页操作单页数据
+    @Override
+    public List<Processes> getOnepageDate(List<Processes> list, Integer limit, Integer page) {
+        Integer pagesize = list.size() / limit + 1;
+        Integer listStart = (page - 1) * limit;
+        Integer listEnd;
+        if (page != pagesize) {
+            listEnd = (page - 1) * limit + limit - 1;
+        } else {
+            listEnd = list.size();
+        }
+        System.out.println("pagesize--------" + pagesize);
+        System.out.println("listStart--------" + listStart);
+        System.out.println("listEnd--------" + listEnd);
+        List<Processes> processesList = new ArrayList<>();
+        for (int i = listStart; i < listEnd; i++) {
+            processesList.add(list.get(i));
+        }
+        return processesList;
+    }
+
+    //根据关键字查询
+    @Override
+    public List<Processes> getSearchDate(List<Processes> list, String inquire) {
+        List<Processes> processesList = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getProcessesStartUser().indexOf(inquire) >= 0
+                    || list.get(i).getProcessesDefinitionId().indexOf(inquire) >= 0
+                    || list.get(i).getProcessesName().indexOf(inquire) >=0
+                    || list.get(i).getProcessesStartTime().indexOf(inquire) >=0
+                    || list.get(i).getProcessesTask().indexOf(inquire) >=0) {
+                processesList.add(list.get(i));
+            }
+        }
         return processesList;
     }
 }

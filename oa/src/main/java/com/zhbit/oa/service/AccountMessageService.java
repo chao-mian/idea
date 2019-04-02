@@ -9,6 +9,8 @@ public interface AccountMessageService {
 
     AccountMessage findByAid(String aid);
 
+    AccountMessage findByAMname(String aMname);
+
     List<AccountMessage> findAll();
 
     boolean updateMessage(AccountMessage accountMessage);

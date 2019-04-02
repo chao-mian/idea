@@ -104,11 +104,19 @@ public class ProcessesController {
         String username = accountMessage.getaMname();
         System.out.println("登录用户---" + user);
         System.out.println("登录用户名---" + username);
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------"+inquire);
+        System.out.println("limit--------"+limit);
+        System.out.println("page--------"+page);
         List<Processes> processesList = processesService.getAllProcessesList();
 
         List<Processes> ToDoprocesses = new ArrayList<>();
         for (int i = 0; i < processesList.size(); i++) {
-            Task task = taskService.createTaskQuery().processDefinitionId(processesList.get(i).getProcessesDefinitionId()).singleResult();
+            Task task = taskService.createTaskQuery()
+                    .processDefinitionId(processesList.get(i)
+                            .getProcessesDefinitionId()).singleResult();
             String processesStartUser = processesList.get(i).getProcessesStartUser();
             System.out.println("流程创建者----" + processesStartUser);
             if (task != null) {
@@ -119,34 +127,56 @@ public class ProcessesController {
 
         }
         System.out.println("ToDoProcesses----" + ToDoprocesses);
+        //分页操作
+        List<Processes> showToDoProcessesList = new ArrayList<>();
+        if(inquire==null){
+            showToDoProcessesList = processesService.getOnepageDate(ToDoprocesses,limit,page);
+        }else {
+            showToDoProcessesList = processesService.getSearchDate(ToDoprocesses,inquire);
+        }
         LayuiJson layuiJson = new LayuiJson();
+        layuiJson.setLimit(limit);
+        layuiJson.setPage(page);
         layuiJson.setCode("0");
         layuiJson.setMsg("成功");
         layuiJson.setCount(String.valueOf(ToDoprocesses.size()));
-        layuiJson.setData(ToDoprocesses);
+        layuiJson.setData(showToDoProcessesList);
         return layuiJson;
     }
 
     @ResponseBody
     @RequestMapping(value = "/getDoneProcesses")
     public LayuiJson ShowDoneProcesses( Model model, HttpServletRequest request) {
-
-
         //获取登录用户
         Account user = (Account) request.getSession().getAttribute("loginUser");
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
         String username = accountMessage.getaMname();
         System.out.println("登录用户---" + user);
         System.out.println("登录用户名---" + username);
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------"+inquire);
+        System.out.println("limit--------"+limit);
+        System.out.println("page--------"+page);
+
+        //获取该用户已办所有流程
         List<Processes> doneProcessesList = processesService.getActivityProcessesList(username);
+        //分页操作
+        List<Processes> showDoneProcessesList = new ArrayList<>();
+        if(inquire==null||inquire==""){
+            showDoneProcessesList = processesService.getOnepageDate(doneProcessesList,limit,page);
+        }else {
+            showDoneProcessesList = processesService.getSearchDate(doneProcessesList,inquire);
+        }
         LayuiJson layuiJson = new LayuiJson();
-
         System.out.println("doneProcessesList----" + doneProcessesList);
-
+        layuiJson.setLimit(limit);
+        layuiJson.setPage(page);
         layuiJson.setCode("0");
         layuiJson.setMsg("成功");
         layuiJson.setCount(String.valueOf(doneProcessesList.size()));
-        layuiJson.setData(doneProcessesList);
+        layuiJson.setData(showDoneProcessesList);
         return layuiJson;
     }
 
@@ -159,6 +189,12 @@ public class ProcessesController {
         String username = accountMessage.getaMname();
         System.out.println("登录用户---" + user);
         System.out.println("登录用户名---" + username);
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------"+inquire);
+        System.out.println("limit--------"+limit);
+        System.out.println("page--------"+page);
 //获取所有流程
         List<Processes> processesList = processesService.getAllProcessesList();
         //将流程创建者或流程中有节点有该用户的流程存到Myprocesses
@@ -171,11 +207,20 @@ public class ProcessesController {
                 Myprocesses.add(processesList.get(i));
             }
         }
+        //分页操作
+        List<Processes> showMyProcessesList = new ArrayList<>();
+        if(inquire==null){
+            showMyProcessesList = processesService.getOnepageDate(processesList,limit,page);
+        }else {
+            showMyProcessesList = processesService.getSearchDate(processesList,inquire);
+        }
         LayuiJson layuiJson = new LayuiJson();
+        layuiJson.setLimit(limit);
+        layuiJson.setPage(page);
         layuiJson.setCode("0");
         layuiJson.setMsg("成功");
         layuiJson.setCount(String.valueOf(Myprocesses.size()));
-        layuiJson.setData(Myprocesses);
+        layuiJson.setData(showMyProcessesList);
         return layuiJson;
     }
 

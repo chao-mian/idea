@@ -9,6 +9,8 @@ public interface AccountMessageMapper {
 
     AccountMessage selectByAid(String aid);
 
+    AccountMessage selectByaMname(String aMname);
+
     List<AccountMessage> selectAll();
 
     boolean updateMessage(AccountMessage accountMessage);

@@ -8,6 +8,9 @@
     <select id="selectByAid" resultType="AccountMessage" parameterType="java.lang.String">
         select * from oa_accountmessage where aid = #{aid}
     </select>
+    <select id="selectByaMname" resultType="AccountMessage" parameterType="java.lang.String">
+        select * from oa_accountmessage where aMname = #{aMname}
+    </select>
     <select id="selectAll" resultType="AccountMessage" parameterType="java.lang.String">
         select * from oa_accountmessage
     </select>

@@ -9,6 +9,12 @@
     <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
 </head>
 <body>
+<span th:if="${flag}!=null">
+<script th:inline="javascript">
+var flag = [[${flag}]];
+alert(flag);
+</script>
+</span>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
     <legend>请假申请</legend>
 </fieldset>
@@ -17,15 +23,15 @@
     <div id="backHtml" style="width: 700px">
         <div class="layui-form-item">
             <label class="layui-form-label">申&nbsp;请&nbsp;人</label>
-            <div class="layui-input-block">
-                <input type="text" name="name" lay-verify="" autocomplete="off" placeholder="请输入申请人姓名"
+            <div class="layui-input-inline">
+                <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入申请人姓名"
                        class="layui-input">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</label>
-            <div class="layui-input-block">
-                <input type="text" name="zhiwei" lay-verify="" autocomplete="off" placeholder="请输入职位"
+            <div class="layui-input-inline">
+                <input type="text" name="zhiwei" lay-verify="required" autocomplete="off" placeholder="请输入职位"
                        class="layui-input">
             </div>
         </div>
@@ -54,14 +60,14 @@
             <div class="layui-inline">
                 <label class="layui-form-label">请假时间起</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startDate" id="startDate" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss"
+                    <input type="text" name="startDate" id="startDate" lay-verify="required"  placeholder="yyyy-MM-dd HH:mm:ss"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">请假时间止</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="endDate" id="endDate" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss"
+                    <input type="text" name="endDate" id="endDate" lay-verify="required" placeholder="yyyy-MM-dd HH:mm:ss"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -113,7 +119,7 @@
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
-            <button class="layui-btn" lay-submit="" lay-filter="demo1">立即提交</button>
+            <button class="layui-btn" id="tijiao" lay-submit="" lay-filter="demo1">立即提交</button>
             <button type="reset" class="layui-btn layui-btn-primary">重置</button>
         </div>
     </div>
@@ -135,6 +141,57 @@
     for (var i = 0; i < hrlist.length; i++) {
         $("#hr").append("<option value='" + hrlist[i].aMname + "'>" + hrlist[i].aMname + "</option>");
     }
+    $('#tijiao').click(function () {
+        if($('#date').val()!=null&&$('#date').val()!=""&&
+            $('#startDate').val()!=null&&$('#startDate').val()!=""&&
+            $('#endDate').val()!=null&&$('#endDate').val()!="") {
+            var endTime = $("#endScanTime").val();
+            var today = new Date();//获取当前时间(没有格式化)  
+            var year = today.getFullYear();//获取年份,四位数
+            var month = today.getMonth() + 1;//获取月份,0-11
+            var day = today.getDate();//获取几号
+            var hours = today.getHours();
+            var minutes = today.getMinutes();
+            var seconds = today.getSeconds();
+            if (month <= 9) {//格式化  
+                month = "0" + month;
+            }
+            if (day <= 9) {
+                day = "0" + day;
+            }
+            if (hours <= 9) {
+                hours = "0" + hours;
+            }
+            if (minutes <= 9) {
+                minutes = "0" + minutes;
+            }
+
+            today = year + "-" + month + "-" + day;
+            if (today > $('#date').val()) {//对比日期大小  
+                layer.open({
+                    title: '提示',
+                    content: '申请日期要大于当前日期!' //这里content是一个普通的String
+                });
+                return false;
+            }
+            today = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+            if (today > $('#startDate').val()) {//对比日期大小  
+                layer.open({
+                    title: '提示',
+                    content: '开始时间要大于当前时间!' //这里content是一个普通的String
+                });
+
+                return false;
+            }
+            if ($('#endDate').val() <= $('#startDate').val()) {
+                layer.open({
+                    title: '提示',
+                    content: '结束时间要大于开始时间!' //这里content是一个普通的String
+                });
+                return false;
+            }
+        }
+    });
     layui.use(['form', 'layedit', 'laydate'], function () {
         var form = layui.form
             , layer = layui.layer
@@ -154,10 +211,13 @@
             elem: '#date'
         });
         //监听提交
-        form.on('submit(demo1)', function(data){
-            /*var date =
-            if($('#startDate').val())*/
-        });
+        /*form.on('submit(demo1)', function(data){
+            // var date =new Date();
+            var date=new Date(str.replace("-", "/").replace("-", "/"));
+            console.log(date);
+            console.log($('#startDate').val());
+            return false;
+        });*/
 //表单初始赋值
         /*form.val('example', {
             "username": "贤心" // "name": "value"

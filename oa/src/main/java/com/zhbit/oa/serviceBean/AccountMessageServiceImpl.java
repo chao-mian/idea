@@ -31,6 +31,11 @@ public class AccountMessageServiceImpl implements AccountMessageService {
         AccountMessage accountMessage = accountMessageMapper.selectByAid(aid);
         return accountMessage;
     }
+    //通过姓名查询
+    public AccountMessage findByAMname(String aMname){
+        AccountMessage accountMessage = accountMessageMapper.selectByaMname(aMname);
+        return accountMessage;
+    }
 
     //通过aMid查询
     public AccountMessage findByaMid(String aMid) {
