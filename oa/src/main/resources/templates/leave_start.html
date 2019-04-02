@@ -50,17 +50,18 @@
 
         <div class="layui-form-item">
 
+
             <div class="layui-inline">
                 <label class="layui-form-label">请假时间起</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="startDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                    <input type="text" name="startDate" id="startDate" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
             <div class="layui-inline">
                 <label class="layui-form-label">请假时间止</label>
                 <div class="layui-input-inline">
-                    <input type="text" name="endDate" id="date" lay-verify="date" placeholder="yyyy-MM-dd"
+                    <input type="text" name="endDate" id="endDate" lay-verify="date" placeholder="yyyy-MM-dd HH:mm:ss"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -109,8 +110,6 @@
             <textarea class="layui-textarea layui-hide" name="content" lay-verify="content" id="LAY_demo_editor"></textarea>
           </div>
         </div>-->
-
-
     </div>
     <div class="layui-form-item">
         <div class="layui-input-block">
@@ -141,14 +140,34 @@
             , layer = layui.layer
             , layedit = layui.layedit
             , laydate = layui.laydate;
-
+//日期时间选择器
+        laydate.render({
+            elem: '#startDate'
+            ,type: 'datetime'
+        });
+        laydate.render({
+            elem: '#endDate'
+            ,type: 'datetime'
+        });
         //日期
         laydate.render({
             elem: '#date'
         });
-        laydate.render({
-            elem: '#date1'
+        //监听提交
+        form.on('submit(demo1)', function(data){
+            /*var date =
+            if($('#startDate').val())*/
         });
+//表单初始赋值
+        /*form.val('example', {
+            "username": "贤心" // "name": "value"
+            ,"password": "123456"
+            ,"interest": 1
+            ,"like[write]": true //复选框选中状态
+            ,"close": true //开关状态
+            ,"sex": "女"
+            ,"desc": "我爱 layui"
+        })*/
 
     });
 
