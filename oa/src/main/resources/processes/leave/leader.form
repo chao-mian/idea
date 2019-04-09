@@ -49,7 +49,7 @@
     </div>
   </div>
   <div class="layui-form-item">
-      <label class="layui-form-label">请假类型</label>
+      <label class="layui-form-label">审批</label>
       <div class="layui-input-inline">
         <select name="leaderApproval" lay-verify="required">
           <option value="">直接选择或搜索选择</option>

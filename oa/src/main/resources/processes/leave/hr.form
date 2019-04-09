@@ -62,13 +62,13 @@
  <div class="layui-form-item layui-form-text">
     <label class="layui-form-label">审批意见</label>
     <div class="layui-input-block">
-      <textarea placeholder="请输入内容" name="hrOpinion" class="layui-textarea"></textarea>
+      <textarea placeholder="请输入内容" name="leaderOpinion" class="layui-textarea"></textarea>
     </div>
   </div>
   <div class="layui-form-item">
       <label class="layui-form-label">审批</label>
       <div class="layui-input-inline">
-        <select name="hrApproval" lay-verify="required">
+        <select name="leaderApproval" lay-verify="required">
           <option value="">直接选择或搜索选择</option>
           <option value="同意">同意</option>
           <option value="不同意">不同意</option>	

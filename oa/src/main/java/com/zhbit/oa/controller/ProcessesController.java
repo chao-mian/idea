@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class ProcessesController {
@@ -107,9 +105,9 @@ public class ProcessesController {
         Integer limit = Integer.parseInt(request.getParameter("limit"));
         Integer page = Integer.parseInt(request.getParameter("page"));
         String inquire = request.getParameter("inquire");
-        System.out.println("inquire--------"+inquire);
-        System.out.println("limit--------"+limit);
-        System.out.println("page--------"+page);
+        System.out.println("inquire--------" + inquire);
+        System.out.println("limit--------" + limit);
+        System.out.println("page--------" + page);
         List<Processes> processesList = processesService.getAllProcessesList();
 
         List<Processes> ToDoprocesses = new ArrayList<>();
@@ -129,10 +127,10 @@ public class ProcessesController {
         System.out.println("ToDoProcesses----" + ToDoprocesses);
         //分页操作
         List<Processes> showToDoProcessesList = new ArrayList<>();
-        if(inquire==null){
-            showToDoProcessesList = processesService.getOnepageDate(ToDoprocesses,limit,page);
-        }else {
-            showToDoProcessesList = processesService.getSearchDate(ToDoprocesses,inquire);
+        if (inquire == null) {
+            showToDoProcessesList = processesService.getOnepageDate(ToDoprocesses, limit, page);
+        } else {
+            showToDoProcessesList = processesService.getSearchDate(ToDoprocesses, inquire);
         }
         LayuiJson layuiJson = new LayuiJson();
         layuiJson.setLimit(limit);
@@ -146,7 +144,7 @@ public class ProcessesController {
 
     @ResponseBody
     @RequestMapping(value = "/getDoneProcesses")
-    public LayuiJson ShowDoneProcesses( Model model, HttpServletRequest request) {
+    public LayuiJson ShowDoneProcesses(Model model, HttpServletRequest request) {
         //获取登录用户
         Account user = (Account) request.getSession().getAttribute("loginUser");
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
@@ -156,18 +154,18 @@ public class ProcessesController {
         Integer limit = Integer.parseInt(request.getParameter("limit"));
         Integer page = Integer.parseInt(request.getParameter("page"));
         String inquire = request.getParameter("inquire");
-        System.out.println("inquire--------"+inquire);
-        System.out.println("limit--------"+limit);
-        System.out.println("page--------"+page);
+        System.out.println("inquire--------" + inquire);
+        System.out.println("limit--------" + limit);
+        System.out.println("page--------" + page);
 
         //获取该用户已办所有流程
         List<Processes> doneProcessesList = processesService.getActivityProcessesList(username);
         //分页操作
         List<Processes> showDoneProcessesList = new ArrayList<>();
-        if(inquire==null||inquire==""){
-            showDoneProcessesList = processesService.getOnepageDate(doneProcessesList,limit,page);
-        }else {
-            showDoneProcessesList = processesService.getSearchDate(doneProcessesList,inquire);
+        if (inquire == null || inquire == "") {
+            showDoneProcessesList = processesService.getOnepageDate(doneProcessesList, limit, page);
+        } else {
+            showDoneProcessesList = processesService.getSearchDate(doneProcessesList, inquire);
         }
         LayuiJson layuiJson = new LayuiJson();
         System.out.println("doneProcessesList----" + doneProcessesList);
@@ -192,12 +190,12 @@ public class ProcessesController {
         Integer limit = Integer.parseInt(request.getParameter("limit"));
         Integer page = Integer.parseInt(request.getParameter("page"));
         String inquire = request.getParameter("inquire");
-        System.out.println("inquire--------"+inquire);
-        System.out.println("limit--------"+limit);
-        System.out.println("page--------"+page);
+        System.out.println("inquire--------" + inquire);
+        System.out.println("limit--------" + limit);
+        System.out.println("page--------" + page);
 //获取所有流程
         List<Processes> processesList = processesService.getAllProcessesList();
-        //将流程创建者或流程中有节点有该用户的流程存到Myprocesses
+        //将流程创建者该用户的流程存到Myprocesses
         List<Processes> Myprocesses = new ArrayList<>();
         for (int i = 0; i < processesList.size(); i++) {
 
@@ -209,10 +207,10 @@ public class ProcessesController {
         }
         //分页操作
         List<Processes> showMyProcessesList = new ArrayList<>();
-        if(inquire==null){
-            showMyProcessesList = processesService.getOnepageDate(processesList,limit,page);
-        }else {
-            showMyProcessesList = processesService.getSearchDate(processesList,inquire);
+        if (inquire == null) {
+            showMyProcessesList = processesService.getOnepageDate(Myprocesses, limit, page);
+        } else {
+            showMyProcessesList = processesService.getSearchDate(Myprocesses, inquire);
         }
         LayuiJson layuiJson = new LayuiJson();
         layuiJson.setLimit(limit);
@@ -303,9 +301,9 @@ public class ProcessesController {
                         .createHistoricVariableInstanceQuery()                                      //创建一个历史的流程变量查询对象
                         .processInstanceId(hi.getId())
                         .list();
-                if(list !=null && list.size()>0){
-                    for(HistoricVariableInstance hvi:list4){
-                        System.out.println(hvi.getId()+"   "+hvi.getProcessInstanceId()+"   "+hvi.getVariableName()+"   "+hvi.getVariableTypeName()+"    "+hvi.getValue());
+                if (list != null && list.size() > 0) {
+                    for (HistoricVariableInstance hvi : list4) {
+                        System.out.println(hvi.getId() + "   " + hvi.getProcessInstanceId() + "   " + hvi.getVariableName() + "   " + hvi.getVariableTypeName() + "    " + hvi.getValue());
                         System.out.println("###############################################");
                     }
                 }

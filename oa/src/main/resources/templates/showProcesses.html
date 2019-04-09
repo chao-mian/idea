@@ -56,6 +56,10 @@ alert(flag);
             , url: url
             , toolbar: '#toolbarDemo'
             , title: '流程列表'
+            ,initSort: {
+                field: 'processesStartTime' //排序字段，对应 cols 设定的各字段名
+                ,type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
             , cols: [[
                 {type: 'checkbox', fixed: 'left'}
                 , {field: 'processesDefinitionId', title: '流程ID', width: 180, sort: true}
@@ -171,7 +175,24 @@ alert(flag);
                         data: JSON.stringify(data.processesDefinitionId),
                         success: function (data) {
                             // alert(data);
-                            window.location.href = "leaderApprovalForm";
+                            layer.open({
+                                title: '流程审批',
+                                type: 2,
+                                area: ['80%', '96%'],
+                                moveOut:true,
+                                content: 'leaderApprovalForm' //这里content是一个普通的String
+                                ,cancel: function(index, layero){
+                                    window.location.reload();//刷新当前页面.
+                                    // top.$('.info-num').remove();
+                                    top.$('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                                    // top.$('.num').remove();
+                                    top.$('.numOut').load("index" + ' .numOut').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                                        layer.close(index);
+
+                                }
+                                // content: 'ok' //这里content是一个普通的String
+                            });
+                            // window.location.href = "leaderApprovalForm";
                         },
                         error: function () {
                             alert("false");

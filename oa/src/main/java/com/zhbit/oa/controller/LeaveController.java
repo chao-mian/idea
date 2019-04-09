@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -168,7 +170,12 @@ public class LeaveController {
 
     //领导办理流程页面
     @RequestMapping(value = "/leaderApprovalForm")
-    public String LeaderApproval(Model model) {
+    public String LeaderApproval(Model model, HttpServletRequest request, HttpSession session) {
+        String noticeId = (String)request.getSession().getAttribute("noticeId");
+
+        if(noticeId!=null&&noticeId!=""){
+            processDefinitionId = noticeId;
+        }
         Task deptLeaderTask = taskService.createTaskQuery().processDefinitionId(processDefinitionId).singleResult();
         System.out.println("taskId:" + deptLeaderTask.getId() +
                 ",taskName:" + deptLeaderTask.getName() +
@@ -179,6 +186,7 @@ public class LeaveController {
         System.out.println("任务名称---" + deptLeaderTask.getName());
         model.addAttribute("form", renderedTaskForm);
         model.addAttribute("processDefinitionId", processDefinitionId);
+        session.setAttribute("noticeId", null);
         return "leave_approval";
     }
 
@@ -187,14 +195,20 @@ public class LeaveController {
         System.out.println("审批接收到" + leaderApproval);
         // 部门领导审批通过
         System.out.println("流程ID" + processDefinitionId);
-        variables.put("leaderApproval", leaderApproval);
-        variables.put("leaderOpinion", leaderOpinion);
+        if(variables.get("leaderApproval")==null||variables.get("leaderApproval")==""){
+            variables.put("leaderApproval", leaderApproval);
+            variables.put("leaderOpinion", leaderOpinion);
+        }else {
+            variables.put("hrApproval", leaderApproval);
+            variables.put("hrOpinion", leaderOpinion);
+        }
+
         Task deptLeaderTask = taskService.createTaskQuery().processDefinitionId(processDefinitionId).singleResult();
 //        deptLeaderTask.setAssignee("");
         System.out.println("领导审批流程节点id" + deptLeaderTask.getId());
         formService.submitTaskFormData(deptLeaderTask.getId(), variables);
         model.addAttribute("flag", "流程办理成功");
-        return "forward:/showToDoProcesses";
+        return "ok";
     }
 
     //人事办理流程页面
@@ -226,7 +240,7 @@ public class LeaveController {
         System.out.println("hr审批流程节点id" + hrTask.getId());
         formService.submitTaskFormData(hrTask.getId(), variables);
         model.addAttribute("flag", "流程办理成功");
-        return "forward:/showToDoProcesses";
+        return "ok";
     }
 
 

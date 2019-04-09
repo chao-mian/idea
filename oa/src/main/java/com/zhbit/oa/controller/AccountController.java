@@ -3,10 +3,9 @@ package com.zhbit.oa.controller;
 
 import com.zhbit.oa.domain.*;
 import com.zhbit.oa.domain.Character;
-import com.zhbit.oa.service.AccountMessageService;
-import com.zhbit.oa.service.AccountService;
-import com.zhbit.oa.service.MechanismService;
-import com.zhbit.oa.service.PermissionService;
+import com.zhbit.oa.service.*;
+import org.activiti.engine.TaskService;
+import org.activiti.engine.task.Task;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,6 +37,10 @@ public class AccountController {
     AccountMessageService accountMessageService;
     @Autowired
     PermissionService permissionService;
+    @Autowired
+    ProcessesService processesService;
+    @Autowired
+    TaskService taskService;
 
 
     //获取页面jsona传回来的jsona
@@ -96,14 +99,15 @@ public class AccountController {
             model.addAttribute("flag", "dongjie");
         } else if (status.equals("false")) {
             model.addAttribute("flag", "false");
-        } else if(status.equals("null")){
+        } else if (status.equals("null")) {
             System.out.println("controller  null");
             model.addAttribute("flag", "nomessage");
         }
         return "login";
     }
+
     @RequestMapping(value = "/login")
-    public String login( HttpSession session){
+    public String login(HttpSession session) {
         session.setAttribute("loginUser", null);
         return "login";
     }
@@ -113,7 +117,7 @@ public class AccountController {
         Account user = (Account) request.getSession().getAttribute("loginUser");
         System.out.println("user不为空" + user);
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
-        model.addAttribute("accountMessage",accountMessage);
+        model.addAttribute("accountMessage", accountMessage);
         List<CharacterPermission> listCp = permissionService.findByCidInCp(user.getCid());
 //            String[] str = new String[listCp.size()];
         //将该用户的角色所拥有的权限存在listStr中
@@ -144,6 +148,28 @@ public class AccountController {
             System.out.println(listStr.get(i));
         }
         model.addAttribute("listStr", listStr);
+
+        String username = accountMessage.getaMname();
+        List<Processes> processesList = processesService.getAllProcessesList();
+        List<Notice> noticeList = new ArrayList<>();
+        for (int i = 0; i < processesList.size(); i++) {
+            Notice notice = new Notice();
+            Task task = taskService.createTaskQuery()
+                    .processDefinitionId(processesList.get(i)
+                            .getProcessesDefinitionId()).singleResult();
+            String processesStartUser = processesList.get(i).getProcessesStartUser();
+            System.out.println("流程创建者----" + processesStartUser);
+            if (task != null) {
+                if (task.getAssignee().equals(username)) {
+                    notice.setType("待办流程");
+                    notice.setTitle(processesList.get(i).getProcessesName());
+                    noticeList.add(notice);
+                }
+            }
+
+        }
+        System.out.println("noticeList----" + noticeList);
+        model.addAttribute("noticeList",noticeList);
         return "index";
     }
 
@@ -191,10 +217,11 @@ public class AccountController {
     @RequestMapping(value = "/newAccountForm")
     public String newAccountForm(Model model) {
         model.addAttribute("list", permissionService.findAllCharacter());
-        System.out.println("角色list"+permissionService.findAllCharacter());
+        System.out.println("角色list" + permissionService.findAllCharacter());
         return "newAccountForm";
     }
-//显示账户列表
+
+    //显示账户列表
     @RequestMapping(value = "/accountTable")
     public String findAll(Model model) {
         System.out.println("进入findAll");

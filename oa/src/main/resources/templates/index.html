@@ -7,13 +7,16 @@
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/skin_/main.css"/>
     <link rel="stylesheet" type="text/css" href="css/jquery.dialog.css"/>
+
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="layui/layui.js"></script>
     <title>小型企业OA系统</title>
 </head>
 <style>
     #avatar1 {
-        border-radius:50%;
+        border-radius: 50%;
         width: 40px;
         height: 40px;
     }
@@ -23,15 +26,17 @@
     <div id="hd">
         <div class="hd-top">
             <h1 class="logo"><!--<a href="javascript:;" class="logo-icon"></a>--></h1>
-            <div class="user-info">
+            <div class="user-info" style="width: 300px;">
                 <a href="javascript:;" class="user-avatar">
 
-                        <img id="avatar1" th:src="${'avatar/'+accountMessage.getaMavatar()}" alt=""/>
+                    <img id="avatar1" th:src="${'avatar/'+accountMessage.getaMavatar()}" alt=""/>
                     <span id="avatar">
-                        <i class="info-num">2</i>
+                        <i class="info-num" th:text="${noticeList.size()}">
+                        </i>
                     </span>
                 </a>
                 <span class="user-name" th:text="${accountMessage.getaMname()}"></span>
+
                 <a href="javascript:;" class="more-info"></a>
             </div>
             <div class="setting ue-clear">
@@ -66,20 +71,7 @@
                     <li id="back" style="display: none">
                         <a id="iframeback" href="javascript:;">后台管理</a>
                     </li>
-                    <!--      <li><a href="javascript:;">账户管理</a></li>
 
-                       <li><a href="javascript:;">权限管理</a></li>
-                       <li><a href="javascript:;">架构管理</a></li>
-
-                       <li><a href="javascript:;">流程管理</a></li>
-
-
-                       <li><a href="javascript:;">交流中心</a></li>
-                       <li><a href="javascript:;">企业邮箱</a></li>
-                       <li><a href="javascript:;">个人设置</a></li>
-                       <li><a href="javascript:;">交流中心</a></li>
-                       <li><a href="javascript:;">企业邮箱</a></li>
-                       <li><a href="javascript:;">个人设置</a></li> -->
                 </ul>
             </div>
             <div class="nav-btn">
@@ -116,10 +108,12 @@
 <div class="opt-panel user-opt" style="top:52px;left:330px;">
     <ul>
         <li><a class="text">用户资料</a></li>
-        <li><a class="text">短消息<span class="num">(2)</span></a></li>
-        <li><a class="text">资料信息</a></li>
+        <li class="numOut">
+            <a class="bordered text" data-dropdown="#dropdown-left-center">短消息
+                <span class="num">(<span th:text="${noticeList.size()}"></span>)</span>
+            </a>
+        </li>
         <li><a class="text">注销</a></li>
-        <li><a class="text">自定义</a></li>
     </ul>
     <div class="opt-panel-tl"></div>
     <div class="opt-panel-tc"></div>
@@ -202,6 +196,21 @@
         $("#bd").height($(window).height() - $("#hd").outerHeight() - 26);
 
     });
+
+    layui.use('layer', function () {
+        var layer = layui.layer;
+        $('.bordered').click(function () {
+            layer.open({
+                title: '通知信息',
+                type: 2,
+                area: ['80%', '96%'],
+                content: 'showNotice' //这里content是一个普通的String
+            });
+        });
+
+
+    })
+
     $("#iframePersonnel").click(function () {
         $("iframe").attr("src", "navPersonnel.html");
         // $('#bd').remove();

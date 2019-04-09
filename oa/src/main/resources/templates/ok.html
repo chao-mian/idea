@@ -1,10 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
+<link rel="stylesheet" type="text/css" href="css/style.css"/>
+<link rel="stylesheet" type="text/css" href="css/skin_/main.css"/>
+<link rel="stylesheet" type="text/css" href="css/jquery.dialog.css"/>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/global.js"></script>
+<link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+<script type="text/javascript" src="layui/layui.js"></script>
 <body>
-success
-</body>
+<div class="exitDialog"
+     style="
+     /*width:300px;*/
+            /*height: 100px;*/
+            /*background:green;*/
+            position: absolute;
+            left:50%;
+            top:50%;
+            margin-left:-100px;
+            margin-top:-100px;">
+    <div class="content">
+        <div class="ui-dialog-icon" style="float: left"></div>
+        <div class="ui-dialog-text">
+            <p class="dialog-content" >审批成功</p>
+        </div>
+    </div>
+</div>
+</body><!--
+<script type="text/javascript" th:inline="javascript">
+    layui.use('layer', function () {
+        var layer = layui.layer;
+        layer.open({
+            title: '提示',
+            content: '成功'
+            , btn: ['按钮一']
+
+            , btn1: function (index, layero) {
+                //按钮【按钮二】的回调
+                // alert("aa");
+                //return false 开启该代码可禁止点击该按钮关闭
+                window.opener=null;
+                window.open('','_self');
+                window.close();
+            }
+
+            , cancel: function () {
+                //右上角关闭回调
+
+                //return false 开启该代码可禁止点击该按钮关闭
+            }
+        });
+    });
+</script>-->
 </html>
