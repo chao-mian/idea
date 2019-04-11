@@ -25,14 +25,14 @@ alert(flag);
             <label class="layui-form-label">申&nbsp;请&nbsp;人</label>
             <div class="layui-input-inline">
                 <input type="text" name="name" lay-verify="required" autocomplete="off" placeholder="请输入申请人姓名"
-                       class="layui-input">
+                       class="layui-input" th:value="${accountMessage.getaMname()}">
             </div>
         </div>
         <div class="layui-form-item">
             <label class="layui-form-label">职&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;位</label>
             <div class="layui-input-inline">
                 <input type="text" name="zhiwei" lay-verify="required" autocomplete="off" placeholder="请输入职位"
-                       class="layui-input">
+                       class="layui-input" th:value="${accountMessage.getaMposition()}">
             </div>
         </div>
         <div class="layui-form-item">
@@ -132,9 +132,28 @@ alert(flag);
     var mechanismList = [[${mechanismList}]];
     var leaderList = [[${leaderList}]];
     var hrlist = [[${hrlist}]];
+    var accountMessage = [[${accountMessage}]];
+    // alert(accountMessage.aMmechanism);
+    var today = new Date();//获取当前时间(没有格式化)  
+    var year = today.getFullYear();//获取年份,四位数
+    var month = today.getMonth() + 1;//获取月份,0-11
+    var day = today.getDate();//获取几号
+
+    if (month <= 9) {//格式化  
+        month = "0" + month;
+    }
+    if (day <= 9) {
+        day = "0" + day;
+    }
+
+    today = year + "-" + month + "-" + day;
+    $('#date').val(today);
+
+
     for (var i = 0; i < mechanismList.length; i++) {
         $("#mechanism").append("<option value='" + mechanismList[i].mname + "'>" + mechanismList[i].mname + "</option>");
     }
+    $('#mechanism').val(accountMessage.aMmechanism);
     for (var i = 0; i < leaderList.length; i++) {
         $("#leader").append("<option value='" + leaderList[i].aMname + "'>" + leaderList[i].aMname + "</option>");
     }

@@ -31,8 +31,10 @@
 
                     <img id="avatar1" th:src="${'avatar/'+accountMessage.getaMavatar()}" alt=""/>
                     <span id="avatar">
+                        <span th:if="${noticeList.size()}>0">
                         <i class="info-num" th:text="${noticeList.size()}">
                         </i>
+                        </span>
                     </span>
                 </a>
                 <span class="user-name" th:text="${accountMessage.getaMname()}"></span>
@@ -107,13 +109,17 @@
 
 <div class="opt-panel user-opt" style="top:52px;left:330px;">
     <ul>
-        <li><a class="text">用户资料</a></li>
+        <li><a id="message" class="text">用户资料</a></li>
         <li class="numOut">
-            <a class="bordered text" data-dropdown="#dropdown-left-center">短消息
-                <span class="num">(<span th:text="${noticeList.size()}"></span>)</span>
+            <a class="bordered1 text" data-dropdown="#dropdown-left-center">短消息
+                <span class="num">
+                    <span th:if="${noticeList.size()}>0">
+                    (<span class="bordered" th:text="${noticeList.size()}"></span>)
+                    </span>
+                </span>
             </a>
         </li>
-        <li><a class="text">注销</a></li>
+        <li><a class="text exit">注销</a></li>
     </ul>
     <div class="opt-panel-tl"></div>
     <div class="opt-panel-tc"></div>
@@ -197,17 +203,46 @@
 
     });
 
+    //设置10秒局部刷新一次
+    $(document).ready(function () {
+        setInterval("startRequest()", 300000);
+    });
+
+    function startRequest() {
+        // $("#date").text((newDate()).toString());
+        // console.log("hahahaha");
+        $('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+        // top.$('.num').remove();
+        $('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+    }
+
     layui.use('layer', function () {
         var layer = layui.layer;
-        $('.bordered').click(function () {
+        $('.bordered1').click(function () {
             layer.open({
                 title: '通知信息',
                 type: 2,
                 area: ['80%', '96%'],
                 content: 'showNotice' //这里content是一个普通的String
+                , cancel: function (index, layero) {
+                    // window.location.reload();//刷新当前页面.
+                    // top.$('.info-num').remove();
+                    $('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                    // top.$('.num').remove();
+                    $('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                    layer.close(index);
+
+                }
             });
         });
-
+        $('#message').click(function () {
+            layer.open({
+                title: '用户信息',
+                type: 2,
+                area: ['80%', '96%'],
+                content: 'showPersonnel' //这里content是一个普通的String
+            });
+        });
 
     })
 

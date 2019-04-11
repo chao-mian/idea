@@ -68,8 +68,12 @@ public class LeaveController {
     }
 
     @RequestMapping(value = "/start")
-    public String Start1(Model model) {
+    public String Start1(Model model,HttpServletRequest request) {
 
+        Account user = (Account) request.getSession().getAttribute("loginUser");
+        AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
+        accountMessage.setaMmechanism(mechanismService.findOne(accountMessage.getaMmechanism()) .getMname());
+        model.addAttribute("accountMessage",accountMessage);
         //获取部门信息
         List<Mechanism> mechanismList = mechanismService.findAll();
         System.out.println("所有部门：" + mechanismList);
