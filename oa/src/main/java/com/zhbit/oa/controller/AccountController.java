@@ -113,7 +113,7 @@ public class AccountController {
     }
 
     @RequestMapping(value = "/index")
-    public String indexInTo(Model model, HttpServletRequest request, HttpServletResponse response) {
+    public String indexInTo(Model model,  HttpSession session,HttpServletRequest request, HttpServletResponse response) {
         Account user = (Account) request.getSession().getAttribute("loginUser");
         System.out.println("user不为空" + user);
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
@@ -161,18 +161,29 @@ public class AccountController {
             System.out.println("流程创建者----" + processesStartUser);
             if (task != null) {
                 if (task.getAssignee().equals(username)) {
+                    notice.setId(processesList.get(i).getProcessesDefinitionId());
                     notice.setType("待办流程");
                     notice.setTitle(processesList.get(i).getProcessesName());
+                    notice.setName(processesList.get(i).getProcessesStartUser());
+                    notice.setTime(processesList.get(i).getProcessesStartTime());
                     noticeList.add(notice);
                 }
             }
 
         }
         System.out.println("noticeList----" + noticeList);
+        session.setAttribute("noticeList",noticeList);
         model.addAttribute("noticeList",noticeList);
         return "index";
     }
 
+    @RequestMapping(value = "/main")
+    public String Main(Model model, HttpServletRequest request){
+        List<Notice> noticeList = (List<Notice>)request.getSession().getAttribute("noticeList");
+        System.out.println(noticeList);
+        model.addAttribute("noticeList",noticeList);
+        return "main";
+    }
 
     @RequestMapping(value = "/addAccount")
     public String addAccont(Account account, Model model) {

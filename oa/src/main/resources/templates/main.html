@@ -1,11 +1,13 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta http-equiv="X-UA-Compatible" content="IE=emulateIE7"/>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link rel="stylesheet" type="text/css" href="css/skin_/index.css"/>
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="layui/layui.js"></script>
     <script type="text/javascript" src="js/jquery.js"></script>
     <script type="text/javascript" src="js/global.js"></script>
     <script type="text/javascript" src="js/jquery-ui-1.9.2.custom.min.js"></script>
@@ -64,7 +66,7 @@
                 <li class="nav-item dosthings">
                     <a href="index.html">
                         <p class="icon"></p>
-                        <p class="title">待办事宜</p>
+                        <p class="title">待办流程</p>
                     </a>
                 </li>
                 <li class="nav-item fav">
@@ -83,21 +85,7 @@
             </ul>
 
             <ul class="content-list">
-                <li class="content-item system">
-                    <h2 class="content-hd">
-                    	<span class="opt">
-                        	<span class="refresh" title="刷新"></span>
-                            <span class="setting" title="设置"></span>
-                            <span class="report" title="导出"></span>
-                            <span class="close" title="关闭"></span>
-                        </span>
-                        <span class="title">系统概况</span>
 
-                    </h2>
-                    <div class="content-bd">
-                        <img src="img/skin_/pic1.png"/>
-                    </div>
-                </li>
                 <li class="content-item dothings">
                     <h2 class="content-hd">
                     	<span class="opt">
@@ -106,31 +94,28 @@
                             <span class="report" title="导出"></span>
                             <span class="close" title="关闭"></span>
                         </span>
-                        <span class="title">待办事项</span>
+                        <span class="title">待办流程</span>
                     </h2>
                     <div class="content-bd">
+
                         <ul class="content-list things">
-                            <li class="content-list-item">
-                                <i class="icon"></i>
-                                <a href="javascript:;">查干湖冬捕壮观景象</a>
-                            </li>
-                            <li class="content-list-item">
-                                <i class="icon"></i>
-                                <a href="javascript:;">江西新余：一座城为重病男童圆梦</a>
-                            </li>
-                            <li class="content-list-item">
-                                <i class="icon"></i>
-                                <a href="javascript:;">学生建4.5平米1室1厅1厨1卫 欲申请专利</a>
-                            </li>
-                            <li class="content-list-item">
-                                <i class="icon"></i>
-                                <a href="javascript:;">央视直播曝光中纪委办公区</a>
-                            </li>
-                            <li class="content-list-item">
-                                <i class="icon"></i>
-                                <a href="javascript:;">盘点那些年曾“脱光光”的十大女星</a>
-                            </li>
+                            <tr th:each="processes:${noticeList}">
+                                <input type="hidden" class = "processesid" th:value="${processes.id}">
+                            <span th:if="${processes.type}=='待办流程'">
+                                <li class="content-list-item">
+                                    <i class="icon"></i>
+                                    <a class = "processesa"><span th:text="${processes.title}"></span></a>
+
+                                    <div style="float:right;">
+                                    <span th:text="${processes.name}"></span>
+                                <span th:text="${processes.time}"></span>
+                                        </div>
+                                </li>
+                            </span>
+                            </tr>
+
                         </ul>
+
                     </div>
                 </li>
                 <li class="content-item richeng">
@@ -219,7 +204,21 @@
                         </ul>
                     </div>
                 </li>
+                <!--<li class="content-item system">
+                    <h2 class="content-hd">
+                    	<span class="opt">
+                        	<span class="refresh" title="刷新"></span>
+                            <span class="setting" title="设置"></span>
+                            <span class="report" title="导出"></span>
+                            <span class="close" title="关闭"></span>
+                        </span>
+                        <span class="title">工作日历</span>
 
+                    </h2>
+                    <div class="content-bd" style="height:389px ">
+                        <div class="layui-inline" id="test-n1" style="width: 100%;height: 100%"></div>
+                    </div>
+                </li>-->
                 <li class="content-item news">
                     <h2 class="content-hd">
                     	<span class="opt">
@@ -262,6 +261,17 @@
 </body>
 
 <script type="text/javascript">
+    layui.use('laydate', function () {
+        var laydate = layui.laydate;
+        laydate.render({
+            elem: '#test-n1'
+            , calendar: true
+            , showBottom: false
+            , theme: '#38A3D5'
+            , btns: ['now']
+            , position: 'static'
+        });
+    });
     var minwidth = 282;
     resizeWidth();
     $(top.window).resize(function (e) {
