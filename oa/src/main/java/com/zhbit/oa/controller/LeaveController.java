@@ -69,7 +69,6 @@ public class LeaveController {
 
     @RequestMapping(value = "/start")
     public String Start1(Model model,HttpServletRequest request) {
-
         Account user = (Account) request.getSession().getAttribute("loginUser");
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
         accountMessage.setaMmechanism(mechanismService.findOne(accountMessage.getaMmechanism()) .getMname());
@@ -89,9 +88,12 @@ public class LeaveController {
             //根据账号中的角色ID获取该角色信息
             Character character = permissionService.findByCid(account.getCid());
             //判断该角色是不是领导
-            if (character.getCname().equals("部门领导")) {
-                leaderList.add(accountMessagesList.get(i));
+            if(character!=null){
+                if (character.getCname().equals("部门领导")) {
+                    leaderList.add(accountMessagesList.get(i));
+                }
             }
+
         }
         System.out.println("人事列表" + leaderList);
         model.addAttribute("leaderList", leaderList);
@@ -104,13 +106,6 @@ public class LeaveController {
         }
         System.out.println("人事列表" + hrlist);
         model.addAttribute("hrlist", hrlist);
-//        model.addAttribute("form", renderedStartForm);
-//        System.out.println("任务名称---"+deptLeaderTask.getName());
-        // 启动流程
-        // 设置当前用户
-        /*ProcessInstance processInstance = formService.submitStartFormData(processDefinition.getId(), variables);
-//                 assertNotNull(processInstance);
-        processId = processInstance.getId();*/
         return "leave_start";
     }
 
@@ -118,10 +113,7 @@ public class LeaveController {
     public String Start(Leave leave, Model model) {
         System.out.println("接收到的值leave  " + leave);
         // 启动流程
-//        variables.put("leave", leave);
-
         AccountMessage accountMessage = accountMessageService.findByAMname(leave.getName());
-
         if(accountMessage==null){
             model.addAttribute("flag","申请人不存在，申请失败！");
             return "forward:/start";
@@ -134,16 +126,16 @@ public class LeaveController {
                 return "forward:/start";
             }
         }
+        //部署流程
         DeploymentBuilder builder = repositoryService.createDeployment();
         builder.addClasspathResource("processes/leave/leave.bpmn");
         builder.addClasspathResource("processes/leave/hr.form");
         builder.addClasspathResource("processes/leave/leader.form");
         builder.addClasspathResource("processes/leave/start.form");
         Deployment deployment = builder.deploy();
-        //获取流程定义
+        //获取流程定义，发布流程
         ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().deploymentId(deployment.getId()).singleResult();
         processDefinitionId = processDefinition.getId();
-//                 ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery().singleResult();
         variables.put("name", leave.getName());
         variables.put("zhiwei", leave.getZhiwei());
         variables.put("bumen", leave.getBumen());
@@ -156,16 +148,11 @@ public class LeaveController {
         variables.put("hrAssignee", leave.getHrAssignee());
         // 读取启动表单
         System.out.println("definitionID---" + processDefinition.getId());
-
-
         //设置流程创建人
         String currentUserId = leave.getName();
         identityService.setAuthenticatedUserId(currentUserId);
         System.out.println(processDefinitionId);
         ProcessInstance processInstance = formService.submitStartFormData(processDefinitionId, variables);
-        /*       Object renderedStartForm = formService.getRenderedStartForm(processDefinition.getId());
-
-        System.out.println("表单内容---" + renderedStartForm.toString());*/
         processId = processInstance.getId();
         model.addAttribute("flag", "流程发送成功，请到我的流程中查看流程");
         return "newProcesses";
@@ -206,9 +193,8 @@ public class LeaveController {
             variables.put("hrApproval", leaderApproval);
             variables.put("hrOpinion", leaderOpinion);
         }
-
+        //获取审批节点
         Task deptLeaderTask = taskService.createTaskQuery().processDefinitionId(processDefinitionId).singleResult();
-//        deptLeaderTask.setAssignee("");
         System.out.println("领导审批流程节点id" + deptLeaderTask.getId());
         formService.submitTaskFormData(deptLeaderTask.getId(), variables);
         model.addAttribute("flag", "流程办理成功");

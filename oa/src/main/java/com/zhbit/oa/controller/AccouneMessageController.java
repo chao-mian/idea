@@ -158,6 +158,21 @@ public class AccouneMessageController {
         jsonamData = null;
         return "showPersonnel";
     }
+    @RequestMapping(value = "/personnelMessage")
+    public String PersonnelMessage(Model model, HttpServletRequest request, HttpServletResponse response) {
+        AccountMessage accountMessage;
+        if (jsonamData == null) {
+            Account user = (Account) request.getSession().getAttribute("loginUser");
+            accountMessage = accountMessageService.findByAid(user.getAid());
+            accountMessage = accountMessageService.findByaMid(accountMessage.getaMid());
+        } else {
+            accountMessage = accountMessageService.findByaMid(jsonamData[0]);
+        }
+        System.out.println("json过来查到的数据" + accountMessage);
+        model.addAttribute("accountMessage", accountMessage);
+        jsonamData = null;
+        return "personnelMessage";
+    }
 
     @RequestMapping(value = "/updatePersonnelForm")
     public String updatePersonnelForm(Model model) {

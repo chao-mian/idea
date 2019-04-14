@@ -42,13 +42,13 @@
                 <a href="javascript:;" class="more-info"></a>
             </div>
             <div class="setting ue-clear">
-                <div class="setting-skin">
+                <!--<div class="setting-skin">
                     <div class="switch-bar">
                         <i class="skin-icon"></i>
                         <span class="text">皮肤</span>
                         <i class="arrow-icon"></i>
                     </div>
-                </div>
+                </div>-->
                 <ul class="setting-main ue-clear">
                     <li><a href="javascript:;">桌面</a></li>
                     <li><a href="javascript:;">设置</a></li>
@@ -61,15 +61,10 @@
             <i class="home"><a href="index"></a></i>
             <div class="nav-wrap">
                 <ul class="nav ue-clear">
-                    <li><a href="javascript:;">通讯录</a></li>
                     <li id="personnel" style="display: none">
                         <a id="iframePersonnel" href="javascript:;">人员管理</a>
                     </li>
-                    <li id="file" style="display: none">
-                        <a href="javascript:;">文档管理</a>
-                    </li>
                     <li><a href="javascript:;">新闻管理</a></li>
-                    <li><a href="javascript:;">企业邮箱</a></li>
                     <li id="back" style="display: none">
                         <a id="iframeback" href="javascript:;">后台管理</a>
                     </li>
@@ -240,7 +235,7 @@
                 title: '用户信息',
                 type: 2,
                 area: ['80%', '96%'],
-                content: 'showPersonnel' //这里content是一个普通的String
+                content: 'personnelMessage' //这里content是一个普通的String
             });
         });
 

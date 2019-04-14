@@ -18,73 +18,77 @@ alert(flag);
 </span>
 
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;color: #37A8DD">
-  <legend>全部流程</legend>
-</fieldset>   
- 
+    <legend>全部流程</legend>
+</fieldset>
+
 <div style="padding: 20px; background-color: #F2F2F2;">
-  <div class="layui-row layui-col-space15">
-  	<div class="layui-col-md4">
-      <div class="layui-card">
-        <div class="layui-card-header">常用流程</div>
-        <div class="layui-card-body">
-            <a href="/start">请假申请</a><br>
-            <a href="#">加班申请</a><br>
-        </div>
-      </div>
-        <div class="layui-card">
-            <div class="layui-card-header">费用管理</div>
-            <div class="layui-card-body">
-                结合 layui 的栅格系统<br>
-
-                轻松实现响应式布局
+    <div class="layui-row layui-col-space15">
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">常用流程</div>
+                <div class="layui-card-body">
+                    <a href="/start">请假申请</a><br>
+                    <a href="#">加班申请</a><br>
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">费用管理</div>
+                <div class="layui-card-body">
+                    借款申请<br>
+                    发票开具申请<br>
+                    日常用品报销<br>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="layui-col-md4">
-      <div class="layui-card">
-        <div class="layui-card-header">人事管理</div>
-        <div class="layui-card-body">
-            请假申请<br>
-            加班申请<br>
-            员工入职流程<br>
-            人员岗位调动<br>
-            转正申请
-        </div>
-      </div>
-        <div class="layui-card">
-            <div class="layui-card-header">行政管理</div>
-            <div class="layui-card-body">
-                卡片式面板面板通常用于非白色背景色的主体内<br>
-                从而映衬出边框投影
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">人事管理</div>
+                <div class="layui-card-body">
+                    请假申请<br>
+                    加班申请<br>
+                    员工入职流程<br>
+                    人员岗位调动<br>
+                    转正申请
+                </div>
+            </div>
+            <div class="layui-card">
+                <div class="layui-card-header">行政管理</div>
+                <div class="layui-card-body">
+                    名片印刷申请<br>
+                    物资领用申请<br>
+                    车辆使用申请<br>
+                    会议室申请<br>
+                    会议室申请<br>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="layui-col-md4">
-      <div class="layui-card">
-        <div class="layui-card-header">合同管理</div>
-        <div class="layui-card-body">
-          卡片式面板面板通常用于非白色背景色的主体内<br>
-          卡片式面板面板通常用于非白色背景色的主体内<br>
-          卡片式面板面板通常用于非白色背景色的主体内<br>
-          内容
+        <div class="layui-col-md4">
+            <div class="layui-card">
+                <div class="layui-card-header">合同管理</div>
+                <div class="layui-card-body">
+                    合同开票流程<br>
+                    合同付款申请<br>
+                    合同审批申请<br>
+                    合同范本变更审批<br>
+
+                </div>
+            </div>
         </div>
-      </div>
+
+
     </div>
-
-
-  </div>
-</div> 
+</div>
 </body>
 <script>
-layui.use(['element', 'layer'], function(){
-  var element = layui.element;
-  var layer = layui.layer;
-  
-  //监听折叠
-  element.on('collapse(test)', function(data){
-    layer.msg('展开状态：'+ data.show);
-  });
-});
+    layui.use(['element', 'layer'], function () {
+        var element = layui.element;
+        var layer = layui.layer;
+
+        //监听折叠
+        element.on('collapse(test)', function (data) {
+            layer.msg('展开状态：' + data.show);
+        });
+    });
 </script>
 </html>

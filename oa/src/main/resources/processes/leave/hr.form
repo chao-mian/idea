@@ -21,11 +21,6 @@
      <label class="layui-form-label" name="zhiwei">${date}</label>
     </div>
   </div>
-
-
- 
-  
-    
 <div class="layui-form-item">
 	
     <div class="layui-inline">

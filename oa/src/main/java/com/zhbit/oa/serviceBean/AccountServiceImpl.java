@@ -34,7 +34,9 @@ public class AccountServiceImpl implements AccountService {
         System.out.println("service=>" + account);
         Account account1 = this.accountMapper.login(account);
         System.out.println("search=>" + account1);
+        //根据账号密码判断数据库中是否存在该用户，如果查询结果为空则账号或密码错误
         if (account1 != null) {
+            //判断账户是否为冻结状态
             if (account1.getAstatus().equals("N")) {
                 return "dongjie";
             }else if(accountMessageService.findByAid(account.getAusername())==null){

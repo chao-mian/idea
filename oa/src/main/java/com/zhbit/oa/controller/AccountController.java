@@ -85,7 +85,6 @@ public class AccountController {
     public String login(Account account, Model model, HttpSession session) {
         System.out.println("login输出登录账号" + account);
         model.addAttribute("flag", "success");
-
         String status = accountService.login(account);
         if (status.equals("success")) {
             model.addAttribute("flag", "success");
@@ -112,15 +111,16 @@ public class AccountController {
         return "login";
     }
 
+
     @RequestMapping(value = "/index")
     public String indexInTo(Model model,  HttpSession session,HttpServletRequest request, HttpServletResponse response) {
+        //获取session中的用户信息
         Account user = (Account) request.getSession().getAttribute("loginUser");
         System.out.println("user不为空" + user);
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
         model.addAttribute("accountMessage", accountMessage);
         List<CharacterPermission> listCp = permissionService.findByCidInCp(user.getCid());
-//            String[] str = new String[listCp.size()];
-        //将该用户的角色所拥有的权限存在listStr中
+        //将该用户的角色所拥有的权限存在listStr中，并对该用户进行权限判断
         List<String> listStr = new ArrayList<>();
         for (int i = 0; i < listCp.size(); i++) {
             if (i == 0) {
