@@ -120,6 +120,9 @@ public class AccountController {
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
         model.addAttribute("accountMessage", accountMessage);
         List<CharacterPermission> listCp = permissionService.findByCidInCp(user.getCid());
+        for(CharacterPermission characterPermission:listCp){
+            System.out.println("characterPermission-----"+characterPermission);
+        }
         //将该用户的角色所拥有的权限存在listStr中，并对该用户进行权限判断
         List<String> listStr = new ArrayList<>();
         for (int i = 0; i < listCp.size(); i++) {
@@ -128,7 +131,7 @@ public class AccountController {
             } else {
                 int flag = 0;
                 //判断重复则不存入
-                for (int j = i - 1; j < i; j++) {
+                for (int j = 0; j < listStr.size(); j++) {
                     if (!listCp.get(i).getPid().substring(0, 1).equals(listStr.get(j))) {
                         flag = 1;
                     } else {
@@ -138,14 +141,12 @@ public class AccountController {
                 }
                 if (flag == 1) {
                     listStr.add(listCp.get(i).getPid().substring(0, 1));
-                } else {
-                    break;
                 }
             }
         }
         System.out.println("该用户的cid");
         for (int i = 0; i < listStr.size(); i++) {
-            System.out.println(listStr.get(i));
+            System.out.println("权限----"+listStr.get(i));
         }
         model.addAttribute("listStr", listStr);
 

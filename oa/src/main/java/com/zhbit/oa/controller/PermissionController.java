@@ -124,7 +124,9 @@ public class PermissionController {
         if (jsonpData != null) {
             List<Permission> list1 = new ArrayList<>();
             for (int i = 0; i < list.size(); i++) {
-                if (list.get(i).getPvalue().substring(0, 1).equals(jsonpData[0])) {
+                if (jsonpData[0] == "a") {
+                    list1 = list;
+                } else if (list.get(i).getPvalue().substring(0, 1).equals(jsonpData[0])) {
                     list1.add(list.get(i));
                 }
             }

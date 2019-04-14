@@ -77,6 +77,8 @@
                             <option>后台管理</option>
                             <option>文件管理</option>
                             <option>人员管理</option>
+                            <option>公告管理</option>
+                            <option>新闻管理</option>
                         </select>
                     </div>
                 </div>
@@ -166,6 +168,10 @@
             jsonpData[0] = "f";
         } else if ($('#permissionType').val() == '人员管理') {
             jsonpData[0] = "p";
+        }else if ($('#permissionType').val() == '公告管理') {
+            jsonpData[0] = "n";
+        }else if ($('#permissionType').val() == '新闻管理') {
+            jsonpData[0] = "w";
         }
         $.ajax({
             type: "post",

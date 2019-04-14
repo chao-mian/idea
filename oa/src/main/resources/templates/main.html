@@ -21,7 +21,7 @@
         <div id="main">
             <ul class="nav-list ue-clear">
                 <li class="nav-item desk">
-                    <a href="index.html">
+                    <a href="main">
                         <p class="icon"></p>
                         <p class="title">我的桌面</p>
                     </a>
@@ -39,45 +39,45 @@
                     </a>
                 </li>
 
-                <li class="nav-item plan">
+                <!--<li class="nav-item plan">
                     <a href="index.html">
                         <p class="icon"></p>
                         <p class="title">工作计划</p>
                     </a>
-                </li>
+                </li>-->
                 <li class="nav-item contacts">
                     <a href="index.html">
                         <p class="icon"></p>
                         <p class="title">通讯录</p>
                     </a>
                 </li>
-                <li class="nav-item mail">
-                    <a href="index.html">
-                        <p class="icon"></p>
-                        <p class="title">我的邮件</p>
-                    </a>
-                </li>
-                <li class="nav-item logs">
+                <!-- <li class="nav-item mail">
+                     <a href="index.html">
+                         <p class="icon"></p>
+                         <p class="title">我的邮件</p>
+                     </a>
+                 </li>-->
+                <!--<li class="nav-item logs">
                     <a href="index.html">
                         <p class="icon"></p>
                         <p class="title">我的日志</p>
                     </a>
-                </li>
+                </li>-->
                 <li class="nav-item dosthings">
-                    <a href="index.html">
+                    <a href="showToDoProcesses">
                         <p class="icon"></p>
                         <p class="title">待办流程</p>
                     </a>
                 </li>
-                <li class="nav-item fav">
-                    <a href="index.html">
-                        <p class="icon"></p>
-                        <p class="title">收藏夹</p>
-                    </a>
-                </li>
+                <!-- <li class="nav-item fav">
+                     <a href="index.html">
+                         <p class="icon"></p>
+                         <p class="title">收藏夹</p>
+                     </a>
+                 </li>-->
 
                 <li class="nav-item browser">
-                    <a href="index.html">
+                    <a href="main">
                         <p class="icon"></p>
                         <p class="title">浏览器</p>
                     </a>
@@ -97,26 +97,15 @@
                         <span class="title">待办流程</span>
                     </h2>
                     <div class="content-bd">
+                        <ul class="content-list things" id="todoprocesses">
 
-                        <ul class="content-list things">
-                            <tr th:each="processes:${noticeList}">
-                                <input type="hidden" class = "processesid" th:value="${processes.id}">
-                            <span th:if="${processes.type}=='待办流程'">
-                                <li class="content-list-item">
-                                    <i class="icon"></i>
-                                    <a class = "processesa"><span th:text="${processes.title}"></span></a>
-
-                                    <div style="float:right;">
-                                    <span th:text="${processes.name}"></span>
-                                <span th:text="${processes.time}"></span>
-                                        </div>
-                                </li>
                             </span>
                             </tr>
 
                         </ul>
 
                     </div>
+
                 </li>
                 <li class="content-item richeng">
                     <h2 class="content-hd">
@@ -126,7 +115,7 @@
                             <span class="report" title="导出"></span>
                             <span class="close" title="关闭"></span>
                         </span>
-                        <span class="title">日程安排</span>
+                        <span class="title">公告通知</span>
                     </h2>
                     <div class="content-bd">
                         <ul class="content-list things">
@@ -154,7 +143,7 @@
                     </div>
                 </li>
 
-                <li class="content-item system">
+                <!--<li class="content-item system">
                     <h2 class="content-hd">
                     	<span class="opt">
                         	<span class="refresh" title="刷新"></span>
@@ -167,7 +156,7 @@
                     <div class="content-bd">
                         <img src="img/skin_/pic2.png"/>
                     </div>
-                </li>
+                </li>-->
 
                 <li class="content-item news">
                     <h2 class="content-hd">
@@ -219,7 +208,7 @@
                         <div class="layui-inline" id="test-n1" style="width: 100%;height: 100%"></div>
                     </div>
                 </li>-->
-                <li class="content-item news">
+                <!--<li class="content-item news">
                     <h2 class="content-hd">
                     	<span class="opt">
                         	<span class="refresh" title="刷新"></span>
@@ -253,14 +242,73 @@
                             </li>
                         </ul>
                     </div>
-                </li>
+                </li>-->
             </ul>
         </div>
     </div>
 </div>
 </body>
 
-<script type="text/javascript">
+<script type="text/javascript" th:inline="javascript">
+    var noticeList = [[${noticeList}]];
+    for (var i = 0; i < noticeList.length; i++) {
+        var processes = noticeList[i];
+        if (processes.type == '待办流程') {
+            var content = '<li class="content-list-item">' +
+                '<i class="icon"></i>' +
+                '<a class="processesa" name="processes" id="' + processes.id + '" onclick="dianji(this)">' + processes.title + '</a>' +
+                '<div style="float:right;">' +
+                processes.name +
+                processes.time +
+                '</div>' +
+                '</li>';
+            // alert(content);
+            $('#todoprocesses').append(content);
+        }
+    }
+
+
+    function dianji(obj) {
+        // alert(obj.name);
+        if (obj.name == 'processes') {
+            // alert(obj.name);
+            layui.use('layer', function () {
+                var layer = layui.layer;
+                $.ajax({
+                    type: "post",
+                    url: "jsonProcessDefinitionId",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(obj.id),
+                    success: function (data) {
+                        // alert(data);
+                        layer.open({
+                            title: '流程审批',
+                            type: 2,
+                            area: ['80%', '96%'],
+                            moveOut: true,
+                            content: 'leaderApprovalForm' //这里content是一个普通的String
+                            , cancel: function (index, layero) {
+                                window.location.reload();//刷新当前页面.
+                                // top.$('.info-num').remove();
+                                top.$('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                                // top.$('.num').remove();
+                                top.$('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                                layer.close(index);
+
+                            }
+                            // content: 'ok' //这里content是一个普通的String
+                        });
+                        // window.location.href = "leaderApprovalForm";
+                    },
+                    error: function () {
+                        alert("false");
+                    }
+                });
+            });
+        }
+
+    }
+
     layui.use('laydate', function () {
         var laydate = layui.laydate;
         laydate.render({

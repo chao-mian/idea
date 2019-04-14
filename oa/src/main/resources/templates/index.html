@@ -64,7 +64,12 @@
                     <li id="personnel" style="display: none">
                         <a id="iframePersonnel" href="javascript:;">人员管理</a>
                     </li>
-                    <li><a href="javascript:;">新闻管理</a></li>
+                    <li id="new" style="display: none">
+                        <a id="iframenew" href="javascript:;">新闻管理</a>
+                    </li>
+                    <li id="notice" style="display: none">
+                        <a id="iframenotice" href="javascript:;">公告管理</a>
+                    </li>
                     <li id="back" style="display: none">
                         <a id="iframeback" href="javascript:;">后台管理</a>
                     </li>
@@ -184,8 +189,11 @@
         if (listStr[i] == "p") {
             $('#personnel').show();
         }
-        if (listStr[i] == "f") {
-            $('#file').show();
+        if (listStr[i] == "n") {
+            $('#new').show();
+        }
+        if (listStr[i] == "w") {
+            $('#notice').show();
         }
     }
 
@@ -246,7 +254,16 @@
         // $('#bd').remove();
         $('iframe').load("index" + ' iframe').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
     });
-
+    $("#iframenew").click(function () {
+        $("iframe").attr("src", "navNew.html");
+        // $('#bd').remove();
+        $('iframe').load("index" + ' iframe').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+    });
+    $("#iframenotice").click(function () {
+        $("iframe").attr("src", "navNotice.html");
+        // $('#bd').remove();
+        $('iframe').load("index" + ' iframe').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+    });
     $("#iframeback").click(function () {
         $("iframe").attr("src", "navback.html");
         // $('#bd').remove();
