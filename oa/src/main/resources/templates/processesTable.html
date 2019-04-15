@@ -144,40 +144,58 @@ alert(flag);
             var data = obj.data;
             //console.log(obj)
             if (obj.event === 'del') {
-                layer.confirm('真的删除行么', function (index) {
-                    obj.del();
-                    layer.close(index);
-                });
-            } else if (obj.event === 'edit') {
 
                 $.ajax({
                     type: "post",
-                    url: "jsonProcessDefinitionId",
+                    url: "getProcessesId",
                     contentType: "application/json;charset=utf-8",
-                    data: JSON.stringify(data.processesDefinitionId),
+                    data: JSON.stringify(data.prid),
                     success: function (data) {
                         // alert(data);
+                        // window.location.reload();//刷新当前页面.
                         layer.open({
-                            title: '流程审批',
-                            type: 2,
-                            area: ['80%', '96%'],
+                            title: '提示',
+                            type: 0,
+                            // area: ['50%', '96%'],
                             moveOut: true,
-                            content: 'leaderApprovalForm' //这里content是一个普通的String
-                            , cancel: function (index, layero) {
-                                window.location.reload();//刷新当前页面.
-                                // top.$('.info-num').remove();
-                                top.$('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
-                                // top.$('.num').remove();
-                                top.$('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                            content: '确定删除吗？' //这里content是一个普通的String
+                            ,btn: ['确定', '取消'] //可以无限个按钮
+                            ,btn1: function(index, layero){
                                 layer.close(index);
-
+                                window.location.href = "deleteProcesses";
+                            }
+                            ,btn2: function(index, layero){
+                                layer.close(index);
+                                return false;
+                            }
+                            , cancel: function (index, layero) {
+                                // window.location.reload();//刷新当前页面.
+                                layer.close(index);
+                                return false;
                             }
                             // content: 'ok' //这里content是一个普通的String
                         });
-                        // window.location.href = "leaderApprovalForm";
+
                     },
                     error: function () {
-                        alert("false");
+                        layer.alert("false");
+                    }
+                });
+
+            } else if (obj.event === 'edit') {
+                // layer.alert(data.prid);
+                $.ajax({
+                    type: "post",
+                    url: "getProcessesId",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(data.prid),
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();//刷新当前页面.
+                        window.location.href = "changeStatus";
+                    },
+                    error: function () {
+                        layer.alert("false");
                     }
                 });
 

@@ -9,4 +9,5 @@ public interface ProcessesMapper {
     Processes1 selecrByPrid(String prid);
     boolean insert(Processes1 processes1);
     boolean delete(String prid);
+    boolean update(Processes1 processes1);
 }

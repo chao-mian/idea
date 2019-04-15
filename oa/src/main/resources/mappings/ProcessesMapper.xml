@@ -6,15 +6,15 @@
         select * from oa_processes
     </select>
     <select id="selecrByPrid" resultType="Processes1" parameterType="String">
-        select * from oa_processes where pid = #{prid}
+        select * from oa_processes where prid = #{prid}
     </select>
     <insert id="insert" parameterType="Processes1">
-        INSERT INTO oa_processes (prid,prname,prtype,prstatus) values
-        (#{prid},#{prname},#{prtype},#{prstatus}
+        INSERT INTO oa_processes (prid,prname,prtype,prstatus) values(#{prid},#{prname},#{prtype},#{prstatus})
     </insert>
     <delete id="delete" parameterType="String">
         delete from oa_processes where prid = #{prid}
     </delete>
-
-
+<update id="update" parameterType="Processes1">
+    update oa_processes set prstatus=#{prstatus} where prid=#{prid}
+</update>
 </mapper>

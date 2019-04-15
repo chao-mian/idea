@@ -13,5 +13,9 @@ public interface ProcessesService {
     List<Processes1> getOnepageProcesses1(List<Processes1> list, Integer limit, Integer page);
     List<Processes> getOnepageDate(List<Processes> list,Integer limit,Integer page);
     List<Processes> getSearchDate(List<Processes> list, String inquire);
+    List<Processes1> getSearchProcesses1(List<Processes1> list, String inquire);
     boolean addProcesses(Processes1 processes1);
+    Processes1 findByPrid(String id);
+    boolean delete(String id);
+    boolean updateProcesses(Processes1 processes1);
 }

@@ -49,6 +49,28 @@ public class ProcessesController {
     @Autowired
     private HistoryService historyService;
 
+    private String id;
+
+    @RequestMapping(value = "/getProcessesId")
+    public String GetJsonId(@RequestBody Object prid) {
+
+
+        this.id = prid.toString();
+        System.out.println("get the prid-----" + id);
+        return "ok";
+    }
+
+    @RequestMapping(value = "/changeStatus")
+    public String ChangeStatus() {
+        Processes1 processes1 = processesService.findByPrid(id);
+        if (processes1.getPrstatus().equals("Y")) {
+            processes1.setPrstatus("N");
+        } else {
+            processes1.setPrstatus("Y");
+        }
+        processesService.updateProcesses(processes1);
+        return "forward:/showProcessesTable";
+    }
 
     @RequestMapping(value = "/showAllProcesses")
     public String ShowAllProcesses(Model model) {
@@ -86,15 +108,36 @@ public class ProcessesController {
         return "processesTable";
     }
 
+    @RequestMapping(value = "/deleteProcesses")
+    public String DeleteProcesses(){
+        processesService.delete(id);
+        return "forward:/showProcessesTable";
+    }
+
+    @RequestMapping(value = "/newProcesses")
+    public String NewProcesses(Model model) {
+        List<Processes1> processes1list = processesService.getAllProcesses1List();
+        System.out.println("processes1list---------"+processes1list);
+        model.addAttribute("processes1list",processes1list);
+        return "newProcesses";
+    }
+
     @ResponseBody
     @RequestMapping(value = "/getProcessesTable")
     public LayuiPro GetProcessesTable(HttpServletRequest request) {
         Integer limit = Integer.parseInt(request.getParameter("limit"));
         Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------" + inquire);
         List<Processes1> processes1List = processesService.getAllProcesses1List();
 //        model.addAttribute("processesList",processesList);
         //分页操作
-        List<Processes1> showProcesses1List = processesService.getOnepageProcesses1(processes1List, limit, page);
+        List<Processes1> showProcesses1List;
+        if (inquire == null|| inquire == "") {
+            showProcesses1List =  processesService.getOnepageProcesses1(processes1List, limit, page);
+        } else {
+            showProcesses1List = processesService.getSearchProcesses1(processes1List, inquire);
+        }
         LayuiPro layuiPro = new LayuiPro();
         layuiPro.setCode("0");
         layuiPro.setMsg("成功");
@@ -153,7 +196,7 @@ public class ProcessesController {
         System.out.println("ToDoProcesses----" + ToDoprocesses);
         //分页操作
         List<Processes> showToDoProcessesList = new ArrayList<>();
-        if (inquire == null) {
+        if (inquire == null|| inquire == "") {
             showToDoProcessesList = processesService.getOnepageDate(ToDoprocesses, limit, page);
         } else {
             showToDoProcessesList = processesService.getSearchDate(ToDoprocesses, inquire);
@@ -250,6 +293,7 @@ public class ProcessesController {
 
     @RequestMapping(value = "/addOneProcesses")
     public String AddOneProcesses(Processes1 processes1) {
+        System.out.println("controller收到要添加的------"+processes1);
         processesService.addProcesses(processes1);
         return "ok";
     }

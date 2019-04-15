@@ -27,38 +27,29 @@ alert(flag);
             <div class="layui-card">
                 <div class="layui-card-header">常用流程</div>
                 <div class="layui-card-body">
-                    <a href="/start">请假申请</a><br>
+                    <a href="/leave">请假申请</a><br>
                     <a href="#">加班申请</a><br>
                 </div>
             </div>
             <div class="layui-card">
                 <div class="layui-card-header">费用管理</div>
-                <div class="layui-card-body">
-                    借款申请<br>
-                    发票开具申请<br>
-                    日常用品报销<br>
+                <div class="layui-card-body money">
+
                 </div>
             </div>
         </div>
         <div class="layui-col-md4">
             <div class="layui-card">
                 <div class="layui-card-header">人事管理</div>
-                <div class="layui-card-body">
-                    请假申请<br>
-                    加班申请<br>
-                    员工入职流程<br>
-                    人员岗位调动<br>
-                    转正申请
+                <div class="layui-card-body presonnel">
+
                 </div>
             </div>
             <div class="layui-card">
                 <div class="layui-card-header">行政管理</div>
-                <div class="layui-card-body">
-                    名片印刷申请<br>
-                    物资领用申请<br>
-                    车辆使用申请<br>
-                    会议室申请<br>
-                    会议室申请<br>
+                <div class="layui-card-body administrative">
+
+
                 </div>
             </div>
         </div>
@@ -66,11 +57,7 @@ alert(flag);
         <div class="layui-col-md4">
             <div class="layui-card">
                 <div class="layui-card-header">合同管理</div>
-                <div class="layui-card-body">
-                    合同开票流程<br>
-                    合同付款申请<br>
-                    合同审批申请<br>
-                    合同范本变更审批<br>
+                <div class="layui-card-body contract">
 
                 </div>
             </div>
@@ -80,7 +67,27 @@ alert(flag);
     </div>
 </div>
 </body>
-<script>
+<script th:inline="javascript">
+    var processes1list = [[${processes1list}]];
+    // console.log(processes1list);
+    var connect;
+    for (var i = 0; i < processes1list.length; i++) {
+        connect = '<a href="/' + processes1list[i].prid + '">' + processes1list[i].prname + '</a><br>';
+        if (processes1list[i].prstatus == "启用") {
+            if (processes1list[i].prtype == "人事管理") {
+                $('.presonnel').append(connect);
+            }
+            if (processes1list[i].prtype == "费用管理") {
+                $('.money').append(connect);
+            }
+            if (processes1list[i].prtype == "行政管理") {
+                $('.administrative').append(connect);
+            }
+            if (processes1list[i].prtype == "合同管理") {
+                $('.contract').append(connect);
+            }
+        }
+    }
     layui.use(['element', 'layer'], function () {
         var element = layui.element;
         var layer = layui.layer;

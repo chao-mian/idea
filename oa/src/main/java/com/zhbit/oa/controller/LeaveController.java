@@ -67,7 +67,7 @@ public class LeaveController {
         return "ok";
     }
 
-    @RequestMapping(value = "/start")
+    @RequestMapping(value = "/leave")
     public String Start1(Model model,HttpServletRequest request) {
         Account user = (Account) request.getSession().getAttribute("loginUser");
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
