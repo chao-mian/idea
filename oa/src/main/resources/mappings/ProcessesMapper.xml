@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.ProcessesMapper">
+    <select id="selectAll" resultType="Processes1">
+        select * from oa_processes
+    </select>
+    <select id="selecrByPrid" resultType="Processes1" parameterType="String">
+        select * from oa_processes where pid = #{prid}
+    </select>
+    <insert id="insert" parameterType="Processes1">
+        INSERT INTO oa_processes (prid,prname,prtype,prstatus) values
+        (#{prid},#{prname},#{prtype},#{prstatus}
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_processes where prid = #{prid}
+    </delete>
+
+
+</mapper>

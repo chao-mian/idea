@@ -79,6 +79,32 @@ public class ProcessesController {
         return "showProcesses";
     }
 
+    @RequestMapping(value = "/showProcessesTable")
+    public String ShowProcessesTable(Model model) {
+        String url = "/getProcessesTable";
+        model.addAttribute("url", url);
+        return "processesTable";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getProcessesTable")
+    public LayuiPro GetProcessesTable(HttpServletRequest request) {
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        List<Processes1> processes1List = processesService.getAllProcesses1List();
+//        model.addAttribute("processesList",processesList);
+        //分页操作
+        List<Processes1> showProcesses1List = processesService.getOnepageProcesses1(processes1List, limit, page);
+        LayuiPro layuiPro = new LayuiPro();
+        layuiPro.setCode("0");
+        layuiPro.setMsg("成功");
+        layuiPro.setCount(String.valueOf(processes1List.size()));
+        layuiPro.setData(showProcesses1List);
+//        layuiPro.setLimit(1);
+//        layuiPro.setPage(1);
+        return layuiPro;
+    }
+
     @ResponseBody
     @RequestMapping(value = "/getAllProcesses")
     public LayuiJson ShowProcesses(Model model) {
@@ -222,6 +248,11 @@ public class ProcessesController {
         return layuiJson;
     }
 
+    @RequestMapping(value = "/addOneProcesses")
+    public String AddOneProcesses(Processes1 processes1) {
+        processesService.addProcesses(processes1);
+        return "ok";
+    }
 
     @RequestMapping(value = "/chaxun")
     public String Chaxun() {

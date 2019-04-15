@@ -1,6 +1,8 @@
 package com.zhbit.oa.serviceBean;
 
+import com.zhbit.oa.dao.ProcessesMapper;
 import com.zhbit.oa.domain.Processes;
+import com.zhbit.oa.domain.Processes1;
 import com.zhbit.oa.service.ProcessesService;
 import org.activiti.engine.HistoryService;
 import org.activiti.engine.RepositoryService;
@@ -22,6 +24,27 @@ public class ProcessesServiceImpl implements ProcessesService {
     private TaskService taskService;
     @Autowired
     private HistoryService historyService;
+    @Autowired
+    private ProcessesMapper processesMapper;
+
+    @Autowired
+    public boolean addProcesses(Processes1 processes1){
+        processesMapper.insert(processes1);
+        return true;
+    }
+
+    @Override
+    public List<Processes1> getAllProcesses1List() {
+        List<Processes1> list = processesMapper.selectAll();
+        for(int i=0;i<list.size();i++){
+            if(list.get(i).getPrstatus().equals("Y")){
+                list.get(i).setPrstatus("启用");
+            }else {
+                list.get(i).setPrstatus("禁用");
+            }
+        }
+        return list;
+    }
 
     @Override
     public List<Processes> getAllProcessesList() {
@@ -110,6 +133,27 @@ public class ProcessesServiceImpl implements ProcessesService {
 
     //分页操作单页数据
     @Override
+    public List<Processes1> getOnepageProcesses1(List<Processes1> list, Integer limit, Integer page) {
+        Integer pagesize = list.size() / limit + 1;
+        Integer listStart = (page - 1) * limit;
+        Integer listEnd;
+        if (page != pagesize) {
+            listEnd = (page - 1) * limit + limit - 1;
+        } else {
+            listEnd = list.size();
+        }
+        System.out.println("pagesize--------" + pagesize);
+        System.out.println("listStart--------" + listStart);
+        System.out.println("listEnd--------" + listEnd);
+        List<Processes1> processesList = new ArrayList<>();
+        for (int i = listStart; i < listEnd; i++) {
+            processesList.add(list.get(i));
+        }
+        return processesList;
+    }
+
+    //分页操作单页数据
+    @Override
     public List<Processes> getOnepageDate(List<Processes> list, Integer limit, Integer page) {
         Integer pagesize = list.size() / limit + 1;
         Integer listStart = (page - 1) * limit;
@@ -136,9 +180,9 @@ public class ProcessesServiceImpl implements ProcessesService {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getProcessesStartUser().indexOf(inquire) >= 0
                     || list.get(i).getProcessesDefinitionId().indexOf(inquire) >= 0
-                    || list.get(i).getProcessesName().indexOf(inquire) >=0
-                    || list.get(i).getProcessesStartTime().indexOf(inquire) >=0
-                    || list.get(i).getProcessesTask().indexOf(inquire) >=0) {
+                    || list.get(i).getProcessesName().indexOf(inquire) >= 0
+                    || list.get(i).getProcessesStartTime().indexOf(inquire) >= 0
+                    || list.get(i).getProcessesTask().indexOf(inquire) >= 0) {
                 processesList.add(list.get(i));
             }
         }
