@@ -53,8 +53,6 @@ public class ProcessesController {
 
     @RequestMapping(value = "/getProcessesId")
     public String GetJsonId(@RequestBody Object prid) {
-
-
         this.id = prid.toString();
         System.out.println("get the prid-----" + id);
         return "ok";
@@ -185,13 +183,12 @@ public class ProcessesController {
                     .processDefinitionId(processesList.get(i)
                             .getProcessesDefinitionId()).singleResult();
             String processesStartUser = processesList.get(i).getProcessesStartUser();
-            System.out.println("流程创建者----" + processesStartUser);
+//            System.out.println("流程创建者----" + processesStartUser);
             if (task != null) {
                 if (task.getAssignee().equals(username)) {
                     ToDoprocesses.add(processesList.get(i));
                 }
             }
-
         }
         System.out.println("ToDoProcesses----" + ToDoprocesses);
         //分页操作
@@ -269,7 +266,7 @@ public class ProcessesController {
         for (int i = 0; i < processesList.size(); i++) {
 
             String processesStartUser = processesList.get(i).getProcessesStartUser();
-            System.out.println("流程创建者----" + processesStartUser);
+//            System.out.println("流程创建者----" + processesStartUser);
             if (processesStartUser.equals(username)) {
                 Myprocesses.add(processesList.get(i));
             }

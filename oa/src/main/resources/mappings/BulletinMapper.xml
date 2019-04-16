@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.BulletinMapper">
+    <select id="selectAll" resultType="Bulletin">
+        select * from oa_bulletin
+    </select>
+    <select id="selectByBid" resultType="Bulletin" parameterType="String">
+        select * from oa_bulletin where bid = #{bid}
+    </select>
+    <insert id="add" parameterType="Bulletin">
+        INSERT INTO oa_bulletin (bid,btitle,bsend,btime,bcontent) values (#{bid},#{btitle},#{bsend},#{btime},#{bcontent})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_bulletin where bid = #{bid}
+    </delete>
+    <update id="update" parameterType="Bulletin">
+        update oa_bulletin set btitle = #{btitle} ,bsend = #{bsend},btime = #{btime},bcontent = #{bcontent}
+        where bid=#{bid}
+    </update>
+</mapper>

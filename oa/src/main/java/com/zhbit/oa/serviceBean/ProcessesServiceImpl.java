@@ -51,7 +51,6 @@ public class ProcessesServiceImpl implements ProcessesService {
         processesMapper.update(processes1);
         return true;
     }
-
     @Override
     public List<Processes1> getAllProcesses1List() {
         List<Processes1> list = processesMapper.selectAll();
@@ -87,12 +86,12 @@ public class ProcessesServiceImpl implements ProcessesService {
                 System.out.println("流程持续时间：" + list.get(i).getDurationInMillis());
                 System.out.println("流程创建人：" + list.get(i).getStartUserId());*/
                 if (taskService.createTaskQuery().processInstanceId(list.get(i).getId()).singleResult() != null) {
-                    System.out.println(taskService.createTaskQuery().processInstanceId(list.get(i).getId()).singleResult().getName());
+//                    System.out.println(taskService.createTaskQuery().processInstanceId(list.get(i).getId()).singleResult().getName());
                     processes.setProcessesTask(taskService.createTaskQuery().processDefinitionId(list.get(i).getProcessDefinitionId()).singleResult().getName());
                 } else {
                     processes.setProcessesTask("结束");
                 }
-                System.out.println("=======================================");
+//                System.out.println("=======================================");
                 processes.setProcessesDefinitionId(list.get(i).getProcessDefinitionId());
                 processes.setProcessesName(repositoryService.createProcessDefinitionQuery().processDefinitionId(list.get(i).getProcessDefinitionId()).singleResult().getName());
                 processes.setProcessesStartUser(list.get(i).getStartUserId());
