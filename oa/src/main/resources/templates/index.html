@@ -68,7 +68,7 @@
                         <a id="iframenew" href="javascript:;">新闻管理</a>
                     </li>
                     <li id="notice" style="display: none">
-                        <a id="iframenotice" href="javascript:;">公告管理</a>
+                        <a id="iframebulletin" href="javascript:;">公告管理</a>
                     </li>
                     <li id="back" style="display: none">
                         <a id="iframeback" href="javascript:;">后台管理</a>
@@ -188,7 +188,7 @@
 
     });
 
-    //设置10秒局部刷新一次
+    //设置5分钟局部刷新一次
     $(document).ready(function () {
         setInterval("startRequest()", 300000);
     });
@@ -241,8 +241,8 @@
         // $('#bd').remove();
         $('iframe').load("index" + ' iframe').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
     });
-    $("#iframenotice").click(function () {
-        $("iframe").attr("src", "navNotice.html");
+    $("#iframebulletin").click(function () {
+        $("iframe").attr("src", "navBulletin.html");
         // $('#bd').remove();
         $('iframe').load("index" + ' iframe').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
     });

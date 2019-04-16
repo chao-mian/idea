@@ -120,9 +120,9 @@ public class AccountController {
         AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
         model.addAttribute("accountMessage", accountMessage);
         List<CharacterPermission> listCp = permissionService.findByCidInCp(user.getCid());
-        for(CharacterPermission characterPermission:listCp){
+       /* for(CharacterPermission characterPermission:listCp){
             System.out.println("characterPermission-----"+characterPermission);
-        }
+        }*/
         //将该用户的角色所拥有的权限存在listStr中，并对该用户进行权限判断
         List<String> listStr = new ArrayList<>();
         for (int i = 0; i < listCp.size(); i++) {
@@ -159,7 +159,7 @@ public class AccountController {
                     .processDefinitionId(processesList.get(i)
                             .getProcessesDefinitionId()).singleResult();
             String processesStartUser = processesList.get(i).getProcessesStartUser();
-            System.out.println("流程创建者----" + processesStartUser);
+//            System.out.println("流程创建者----" + processesStartUser);
             if (task != null) {
                 if (task.getAssignee().equals(username)) {
                     notice.setId(processesList.get(i).getProcessesDefinitionId());
