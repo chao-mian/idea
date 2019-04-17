@@ -6,6 +6,9 @@ public class Bulletin {
     private String bsend;
     private String btime;
     private String bcontent;
+    private Integer read;
+    private Integer noread;
+    private String mystatus;
 
     public String getBid() {
         return bid;
@@ -47,6 +50,30 @@ public class Bulletin {
         this.bcontent = bcontent;
     }
 
+    public Integer getRead() {
+        return read;
+    }
+
+    public void setRead(Integer read) {
+        this.read = read;
+    }
+
+    public Integer getNoread() {
+        return noread;
+    }
+
+    public void setNoread(Integer noread) {
+        this.noread = noread;
+    }
+
+    public String getMystatus() {
+        return mystatus;
+    }
+
+    public void setMystatus(String mystatus) {
+        this.mystatus = mystatus;
+    }
+
     @Override
     public String toString() {
         return "Bulletin{" +
@@ -55,6 +82,11 @@ public class Bulletin {
                 ", bsend='" + bsend + '\'' +
                 ", btime='" + btime + '\'' +
                 ", bcontent='" + bcontent + '\'' +
+                ", read=" + read +
+                ", noread=" + noread +
+                ", mystatus='" + mystatus + '\'' +
                 '}';
     }
 }
+
+

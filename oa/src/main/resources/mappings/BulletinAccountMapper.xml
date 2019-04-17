@@ -8,6 +8,12 @@
     <select id="selectByBaid" resultType="BulletinAccount" parameterType="String">
         select * from oa_bulletin_account where baid = #{baid}
     </select>
+    <select id="selectByBidAndAid" resultType="BulletinAccount" parameterType="BulletinAccount">
+        select * from oa_bulletin_account where bid = #{bid} and aid = #{aid}
+    </select>
+    <select id="selectByBidAndBastatus" resultType="BulletinAccount" parameterType="BulletinAccount">
+        select * from oa_bulletin_account where bid = #{bid} and bastatus = #{bastatus}
+    </select>
     <select id="selectByBstatus" resultType="BulletinAccount" parameterType="String">
         select * from oa_bulletin_account where bastatus = #{bastatus}
     </select>
@@ -16,6 +22,9 @@
     </insert>
     <delete id="delete" parameterType="String">
         delete from oa_bulletin_account where baid = #{baid}
+    </delete>
+    <delete id="deleteByBid" parameterType="String">
+        delete from oa_bulletin_account where bid = #{bid}
     </delete>
     <update id="update" parameterType="BulletinAccount">
         update oa_bulletin_account set bid = #{bid} ,aid = #{aid},bastatus = #{bastatus}

@@ -30,8 +30,29 @@ public class BulletinServiceImpl implements BulletinService {
 
     @Override
     public List<Bulletin> getAllBulletin() {
-        return bulletinMapper.selectAll();
+        List<Bulletin> list = bulletinMapper.selectAll();
+        for(int i=0;i<list.size();i++){
+            BulletinAccount bulletinAccount = new BulletinAccount();
+            bulletinAccount.setBid(list.get(i).getBid());
+            bulletinAccount.setBastatus("Y");
+            List<BulletinAccount> bulletinRead = bulletinAccountMapper.selectByBidAndBastatus(bulletinAccount);
+            list.get(i).setRead(bulletinRead.size());
+            bulletinAccount.setBastatus("N");
+            List<BulletinAccount> bulletinNoRead = bulletinAccountMapper.selectByBidAndBastatus(bulletinAccount);
+            list.get(i).setNoread(bulletinNoRead.size());
+        }
+        return list;
     }
+
+    @Override
+    public List<Bulletin> getMyBulletin() {
+        List<Bulletin> list = bulletinMapper.selectAll();
+        for(int i=0;i<list.size();i++){
+            BulletinAccount bulletinAccount = new BulletinAccount();
+        }
+        return list;
+    }
+
 
     @Override
     public Bulletin getOneBulletin(String bid) {
@@ -81,6 +102,13 @@ public class BulletinServiceImpl implements BulletinService {
         System.out.println("bulletin----------" + bulletin);
         bulletinMapper.add(bulletin);
         addBulletinAccount(bulletin);
+        return true;
+    }
+
+    @Override
+    public boolean deleteBulletin(String bid){
+        bulletinMapper.delete(bid);
+        bulletinAccountMapper.deleteByBid(bid);
         return true;
     }
 

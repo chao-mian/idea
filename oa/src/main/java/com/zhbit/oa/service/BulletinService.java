@@ -8,10 +8,13 @@ import java.util.List;
 
 public interface BulletinService {
     List<Bulletin> getAllBulletin();
+    List<Bulletin> getMyBulletin();
     Bulletin getOneBulletin(String bid);
     List<Bulletin> getOnepageBulletin(List<Bulletin> list, Integer limit, Integer page);
     public List<Bulletin> getSearchBulletin(List<Bulletin> list, String inquire);
     boolean addBulletin(Bulletin bulletin);
+    boolean deleteBulletin(String bid);
+
 
 //    boolean addBulletinAccount(Bulletin bulletin);
 }

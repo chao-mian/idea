@@ -51,6 +51,36 @@ public class BulletinController {
         model.addAttribute("url", url);
         return "bulletinTable";
     }
+    @RequestMapping(value = "/showMyBulletinTable")
+    public String ShowMyBulletinTable(Model model) {
+        String url = "/geMytBulletinTable";
+        model.addAttribute("url", url);
+        return "mainBulletinTable";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/geMytBulletinTable")
+    public LayuiBulletin GetMyBulletinTable(HttpServletRequest request) {
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------" + inquire);
+        List<Bulletin> allBulletinlist = bulletinService.getMyBulletin();
+
+        System.out.println("allBulletinlist-------------" + allBulletinlist);
+        List<Bulletin> showBulletinList = new ArrayList<>();
+        if (inquire == null) {
+            showBulletinList = bulletinService.getOnepageBulletin(allBulletinlist, limit, page);
+        } else {
+            showBulletinList = bulletinService.getSearchBulletin(allBulletinlist, inquire);
+        }
+        LayuiBulletin layuiBulletin = new LayuiBulletin();
+        layuiBulletin.setCode("0");
+        layuiBulletin.setMsg("成功");
+        layuiBulletin.setCount(String.valueOf(allBulletinlist.size()));
+        layuiBulletin.setData(showBulletinList);
+        return layuiBulletin;
+    }
 
     @ResponseBody
     @RequestMapping(value = "/getBulletinTable")
@@ -60,6 +90,7 @@ public class BulletinController {
         String inquire = request.getParameter("inquire");
         System.out.println("inquire--------" + inquire);
         List<Bulletin> allBulletinlist = bulletinService.getAllBulletin();
+
         System.out.println("allBulletinlist-------------" + allBulletinlist);
         List<Bulletin> showBulletinList = new ArrayList<>();
         if (inquire == null) {
@@ -86,5 +117,11 @@ public class BulletinController {
         bulletinService.addBulletin(bulletin);
 
         return "ok";
+    }
+
+    @RequestMapping(value = "/deleteBulletin")
+    public String DeleteBulletin(){
+        bulletinService.deleteBulletin(id);
+        return "forward:/showBulletinTable";
     }
 }
