@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?><!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zhbit.oa.dao.NewsMapper">
+    <select id="selectAll" resultType="News">
+        select * from oa_news
+    </select>
+    <select id="selecrByNid" resultType="News" parameterType="String">
+        select * from oa_news where nid = #{nid}
+    </select>
+    <insert id="insert" parameterType="News">
+        INSERT INTO oa_news (nid,ntitle,ntype,nsend,ntime,nmessage) values(#{nid},#{ntitle},#{ntype},#{nsend},#{ntime},#{nmessage})
+    </insert>
+    <delete id="delete" parameterType="String">
+        delete from oa_news where nid = #{nid}
+    </delete>
+    <update id="update" parameterType="News">
+    update oa_news set ntitle=#{ntitle},ntype=#{ntype},nsend=#{nsend},ntime=#{ntime},nmessage=#{nmessage}
+     where nid=#{nid}
+</update>
+</mapper>

@@ -31,6 +31,9 @@ public class AccountController {
     private String jsonaName;
     private String jsonaAccount;
     private String jsonaStatus;
+
+    @Autowired
+    private NewsService newsService;
     @Autowired
     private MechanismService mechanismService;
     @Autowired
@@ -200,8 +203,10 @@ public class AccountController {
     public String Main(Model model, HttpServletRequest request){
         LayuiNotice layuiNotice = (LayuiNotice)request.getSession().getAttribute("layuiNotice");
         List<Notice> noticeList = layuiNotice.getData();
+        List<News> newsList = newsService.getAllNews();
         System.out.println(noticeList);
         model.addAttribute("noticeList",noticeList);
+        model.addAttribute("newsList",newsList);
         return "main";
     }
 

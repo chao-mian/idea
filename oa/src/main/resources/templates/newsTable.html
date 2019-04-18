@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="layui/css/layui.css"/>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="layui/layui.js"></script>
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+</head>
+<body>
+<span th:if="${flag}!=null">
+<script th:inline="javascript">
+var flag = [[${flag}]];
+alert(flag);
+</script>
+</span>
+<div class="demoTable">
+    <div class="layui-form-item">
+        <br>搜索：
+        <div class="layui-inline">
+            <input class="layui-input" name="id" id="demoReload" autocomplete="off"
+                   placeholder="请输入关键词">
+        </div>
+        <button class="layui-btn" data-type="reload" style="background-color:#138FC9">搜索</button>
+    </div>
+</div>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add" style="background-color: #8D8D8D">添加</button>
+        <!--<button class="layui-btn layui-btn-sm" lay-event="getCheckLength">批量删除</button>-->
+        <!--<button class="layui-btn layui-btn-sm" lay-event="isAll">验证是否全选</button>-->
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs layui-btn-normal" lay-event="detail" style="background-color: #1E9FFF"
+    data-method="offset" data-type="auto">查看</a>
+    <!--<a class="layui-btn layui-btn-xs" lay-event="edit" style="background-color: #1E9FFF">修改状态</a>-->
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+
+</body>
+<script type="text/javascript" th:inline="javascript">
+    var url = [[${url}]];
+    // alert(url);
+    layui.use('table', function () {
+        var table = layui.table;
+        table.render({
+            elem: '#test'
+            , url: url
+            , toolbar: '#toolbarDemo'
+            , title: '新闻列表'
+            , initSort: {
+                field: 'bid' //排序字段，对应 cols 设定的各字段名
+                , type: 'desc' //排序方式  asc: 升序、desc: 降序、null: 默认排序
+            }
+            , cols: [[
+                {type: 'checkbox', fixed: 'left'}
+                , {field: 'nid', title: '新闻id', hide:true, width: 180, sort: true}
+                , {field: 'ntitle', title: '新闻标题', width: 180, sort: true}
+                , {field: 'ntype', title: '新闻类型', width: 180, sort: true}
+                , {field: 'nsend', title: '发送人', width: 180, sort: true}
+                /*,{field:'email', title:'邮箱', width:150, edit: 'text', templet: function(res){
+                        return '<em>'+ res.email +'</em>'
+                    }}*/
+                , {field: 'ntime', title: '发送时间', width: 180, sort: true}
+                // , {field: 'noread', title: '未读', width: 180, sort: true}
+                // , {field: 'processesTask', title: '流程状态', width: 180, sort: true}
+                /*,{field:'astatus', title:'状态',width:120,  sort: true}
+                ,{field:'experience', title:'积分', width:80, sort: true}
+                ,{field:'ip', title:'IP', width:120}
+                ,{field:'logins', title:'登入次数', width:100, sort: true}
+                ,{field:'joinTime', title:'加入时间', width:120}*/
+                , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
+            ]]
+            , page: true
+            // ,limit:10
+        });
+        var $ = layui.$, active = {
+            reload: function () {
+                var demoReload = $('#demoReload');
+
+                //执行重载
+                table.reload('test', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
+                    }
+                    , where: {
+                        inquire: demoReload.val()
+                    }
+                });
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function () {
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+        /*  var checkStatus = table.checkStatus('idTest'); //idTest 即为基础参数 id 对应的值
+          console.log(checkStatus.data) //获取选中行的数据
+          console.log(checkStatus.data.length) //获取选中行数量，可作为是否有选中行的条件
+          console.log(checkStatus.isAll ) //表格是否全选*/
+        //头工具栏事件
+        table.on('toolbar(test)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'add':
+                    // var data = checkStatus.data;
+                    // layer.alert("哦豁");
+                    layer.open({
+                        title: '添加新闻',
+                        type: 2,
+                        area: ['80%', '96%'],
+                        moveOut: true,
+                        content: 'addNews' //这里content是一个普通的String
+                        , cancel: function (index, layero) {
+                            window.location.reload();//刷新当前页面.
+                            layer.close(index);
+                        }
+                        // content: 'ok' //这里content是一个普通的String
+                    });
+                    break;
+                case 'getCheckLength':
+                    var data = checkStatus.data;
+                    layer.msg('选中了：' + data.length + ' 个');
+                    break;
+                case 'isAll':
+                    layer.msg(checkStatus.isAll ? '全选' : '未全选');
+                    break;
+            }
+            ;
+        });
+
+        //监听行工具事件
+        table.on('tool(test)', function (obj) {
+            var data = obj.data;
+            //console.log(obj)
+            if (obj.event === 'del') {
+                console.log(data.bid)
+                $.ajax({
+                    type: "post",
+                    url: "getNewsId",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(data.nid),
+                    success: function (data) {
+                        // alert(data);
+                        // window.location.reload();//刷新当前页面.
+                        layer.open({
+                            title: '提示',
+                            type: 0,
+                            // area: ['50%', '96%'],
+                            moveOut: true,
+                            content: '确定删除吗？' //这里content是一个普通的String
+                            ,btn: ['确定', '取消'] //可以无限个按钮
+                            ,btn1: function(index, layero){
+                                layer.close(index);
+                                window.location.href = "deleteNews";
+                            }
+                            ,btn2: function(index, layero){
+                                layer.close(index);
+                                return false;
+                            }
+                            , cancel: function (index, layero) {
+                                // window.location.reload();//刷新当前页面.
+                                layer.close(index);
+                                return false;
+                            }
+                            // content: 'ok' //这里content是一个普通的String
+                        });
+
+                    },
+                    error: function () {
+                        layer.alert("false");
+                    }
+                });
+
+            } else if (obj.event === 'detail') {
+                // layer.alert(data.prid);
+                $.ajax({
+                    type: "post",
+                    url: "getNewsId",
+                    contentType: "application/json;charset=utf-8",
+                    data: JSON.stringify(data.nid),
+                    success: function (data) {
+                        layer.open({
+                            title: '查看新闻',
+                            type: 2,
+                            area: ['80%', '96%'],
+                            moveOut: true,
+                            content: 'showTheNews' //这里content是一个普通的String
+                            , cancel: function (index, layero) {
+                                // window.location.reload();//刷新当前页面.
+                                layer.close(index);
+                                return false;
+                            }
+                            // content: 'ok' //这里content是一个普通的String
+                        });
+                    },
+                    error: function () {
+                        layer.alert("false");
+                    }
+                });
+
+            }
+        });
+    });
+</script>
+</html>
