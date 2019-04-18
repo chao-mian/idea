@@ -3,16 +3,14 @@ package com.zhbit.oa.controller;
 import com.sun.org.apache.xpath.internal.operations.Mod;
 import com.zhbit.oa.domain.Account;
 import com.zhbit.oa.domain.AccountMessage;
+import com.zhbit.oa.domain.LayuiCommunication;
 import com.zhbit.oa.domain.Mechanism;
 import com.zhbit.oa.service.AccountMessageService;
 import com.zhbit.oa.service.MechanismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,7 +28,7 @@ public class AccouneMessageController {
     private String jsonamName;
     private String jsonamSex;
     private String jsonamStatus;
-
+    private String id;
     @Autowired
     private AccountMessageService accountMessageService;
     @Autowired
@@ -49,6 +47,13 @@ public class AccouneMessageController {
     public String jsonamMechanism(@RequestBody String jsonam[]) {
         System.out.println("jsonamMechanism接收jsonam===》" + jsonam[0]);
         jsonamMechanism = jsonam[0];
+        return "ok";
+    }
+
+    @RequestMapping(value = "/jsonamId")
+    public String jsonamId(@RequestBody Object aMid) {
+        System.out.println("jsonamamId接收jsonam===》" + aMid.toString());
+        id = aMid.toString();
         return "ok";
     }
 
@@ -71,6 +76,39 @@ public class AccouneMessageController {
         System.out.println("jsonamStatus接收jsonam===》" + jsonam[0]);
         jsonamStatus = jsonam[0];
         return "ok";
+    }
+
+    @RequestMapping(value = "/showCommunicationTable")
+    public String ShowCommunicationTable(Model model) {
+        String url = "/getCommunicationTable";
+        model.addAttribute("url", url);
+        return "communicationTable";
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/getCommunicationTable")
+    public LayuiCommunication GetMyBulletinTable(HttpServletRequest request) {
+//        Account user = (Account) request.getSession().getAttribute("loginUser");
+
+        Integer limit = Integer.parseInt(request.getParameter("limit"));
+        Integer page = Integer.parseInt(request.getParameter("page"));
+        String inquire = request.getParameter("inquire");
+        System.out.println("inquire--------" + inquire);
+        List<AccountMessage> allAccountMessagelist = accountMessageService.findAll();
+
+        System.out.println("allAccountMessagelist-------------" + allAccountMessagelist);
+        List<AccountMessage> showAccountMessageList = new ArrayList<>();
+        if (inquire == null || inquire == "") {
+            showAccountMessageList = accountMessageService.getOnepageAccountMessage(allAccountMessagelist, limit, page);
+        } else {
+            showAccountMessageList = accountMessageService.getSearchAccountMessage(allAccountMessagelist, inquire);
+        }
+        LayuiCommunication layuiCommunication = new LayuiCommunication();
+        layuiCommunication.setCode("0");
+        layuiCommunication.setMsg("成功");
+        layuiCommunication.setCount(String.valueOf(allAccountMessagelist.size()));
+        layuiCommunication.setData(showAccountMessageList);
+        return layuiCommunication;
     }
 
     @RequestMapping(value = "/newPersonnelForm")
@@ -158,19 +196,24 @@ public class AccouneMessageController {
         jsonamData = null;
         return "showPersonnel";
     }
+
     @RequestMapping(value = "/personnelMessage")
     public String PersonnelMessage(Model model, HttpServletRequest request, HttpServletResponse response) {
         AccountMessage accountMessage;
-        if (jsonamData == null) {
+        System.out.println("id-----------" + id);
+        if (id != null) {
+            accountMessage = accountMessageService.findByaMid(id);
+        } else if (jsonamData != null) {
+            accountMessage = accountMessageService.findByaMid(jsonamData[0]);
+        }else {
             Account user = (Account) request.getSession().getAttribute("loginUser");
             accountMessage = accountMessageService.findByAid(user.getAid());
             accountMessage = accountMessageService.findByaMid(accountMessage.getaMid());
-        } else {
-            accountMessage = accountMessageService.findByaMid(jsonamData[0]);
         }
         System.out.println("json过来查到的数据" + accountMessage);
         model.addAttribute("accountMessage", accountMessage);
         jsonamData = null;
+        id = null;
         return "personnelMessage";
     }
 

@@ -11,6 +11,7 @@ import com.zhbit.oa.service.MechanismService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -40,6 +41,7 @@ public class AccountMessageServiceImpl implements AccountMessageService {
     //通过aMid查询
     public AccountMessage findByaMid(String aMid) {
         AccountMessage accountMessage = accountMessageMapper.selectByaMid(aMid);
+        System.out.println("accountMessage-------"+accountMessage);
         accountMessage.setaMmechanism(mechanismService.findOne(accountMessage.getaMmechanism()).getMname());
         return accountMessage;
     }
@@ -121,5 +123,42 @@ public class AccountMessageServiceImpl implements AccountMessageService {
             list.get(i).setaMmechanism(mechanismService.findOne(list.get(i).getaMmechanism()).getMname());
         }
         return list;
+    }
+    //分页操作单页数据
+    @Override
+    public List<AccountMessage> getOnepageAccountMessage(List<AccountMessage> list, Integer limit, Integer page) {
+        Integer pagesize = list.size() / limit + 1;
+        Integer listStart = (page - 1) * limit;
+        Integer listEnd;
+        if (page != pagesize) {
+            listEnd = (page - 1) * limit + limit - 1;
+        } else {
+            listEnd = list.size();
+        }
+        System.out.println("pagesize--------" + pagesize);
+        System.out.println("listStart--------" + listStart);
+        System.out.println("listEnd--------" + listEnd);
+        List<AccountMessage> bulletinList = new ArrayList<>();
+        for (int i = listStart; i < listEnd; i++) {
+            bulletinList.add(list.get(i));
+        }
+        return bulletinList;
+    }
+
+    //根据关键字查询
+    @Override
+    public List<AccountMessage> getSearchAccountMessage(List<AccountMessage> list, String inquire){
+        List<AccountMessage> bulletilnist = new ArrayList<>();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getaMname().indexOf(inquire) >= 0
+                    || list.get(i).getaMmechanism().indexOf(inquire) >= 0
+                    || list.get(i).getaMsex().indexOf(inquire) >= 0
+                    || list.get(i).getaMposition().indexOf(inquire)>=0
+                    || list.get(i).getaMemail().indexOf(inquire)>=0
+                    || list.get(i).getaMphone().indexOf(inquire)>=0) {
+                bulletilnist.add(list.get(i));
+            }
+        }
+        return bulletilnist;
     }
 }

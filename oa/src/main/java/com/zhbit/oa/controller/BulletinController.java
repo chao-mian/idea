@@ -1,9 +1,6 @@
 package com.zhbit.oa.controller;
 
-import com.zhbit.oa.domain.Account;
-import com.zhbit.oa.domain.AccountMessage;
-import com.zhbit.oa.domain.Bulletin;
-import com.zhbit.oa.domain.LayuiBulletin;
+import com.zhbit.oa.domain.*;
 import com.zhbit.oa.service.AccountMessageService;
 import com.zhbit.oa.service.BulletinService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import java.util.ArrayList;
 
@@ -45,6 +43,25 @@ public class BulletinController {
         return "showBulletin";
     }
 
+    @RequestMapping(value = "/showMyBulletin")
+    public String ShowMyBulletin(Model model, HttpSession session, HttpServletRequest request){
+        Account user = (Account) request.getSession().getAttribute("loginUser");
+        String noticeId = (String)request.getSession().getAttribute("noticeId");
+
+        if(noticeId!=null&&noticeId!=""){
+            id = noticeId;
+        }
+        Bulletin bulletin =bulletinService.getOneBulletin(id);
+        BulletinAccount bulletinAccount = new BulletinAccount();
+        bulletinAccount.setBid(bulletin.getBid());
+        bulletinAccount.setAid(user.getAid());
+        bulletinService.changeStatus(bulletinAccount);
+        System.out.println("bulletin---------"+bulletin);
+        model.addAttribute("bulletin",bulletin);
+        session.setAttribute("noticeId", null);
+        return "showBulletin";
+    }
+
     @RequestMapping(value = "/showBulletinTable")
     public String ShowBulletinTable(Model model) {
         String url = "/getBulletinTable";
@@ -58,18 +75,21 @@ public class BulletinController {
         return "mainBulletinTable";
     }
 
+
     @ResponseBody
     @RequestMapping(value = "/geMytBulletinTable")
     public LayuiBulletin GetMyBulletinTable(HttpServletRequest request) {
+        Account user = (Account) request.getSession().getAttribute("loginUser");
+
         Integer limit = Integer.parseInt(request.getParameter("limit"));
         Integer page = Integer.parseInt(request.getParameter("page"));
         String inquire = request.getParameter("inquire");
         System.out.println("inquire--------" + inquire);
-        List<Bulletin> allBulletinlist = bulletinService.getMyBulletin();
+        List<Bulletin> allBulletinlist = bulletinService.getMyBulletin(user.getAid());
 
         System.out.println("allBulletinlist-------------" + allBulletinlist);
         List<Bulletin> showBulletinList = new ArrayList<>();
-        if (inquire == null) {
+        if (inquire == null||inquire == "") {
             showBulletinList = bulletinService.getOnepageBulletin(allBulletinlist, limit, page);
         } else {
             showBulletinList = bulletinService.getSearchBulletin(allBulletinlist, inquire);

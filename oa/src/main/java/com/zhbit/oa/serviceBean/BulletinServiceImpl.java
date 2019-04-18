@@ -31,7 +31,7 @@ public class BulletinServiceImpl implements BulletinService {
     @Override
     public List<Bulletin> getAllBulletin() {
         List<Bulletin> list = bulletinMapper.selectAll();
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             BulletinAccount bulletinAccount = new BulletinAccount();
             bulletinAccount.setBid(list.get(i).getBid());
             bulletinAccount.setBastatus("Y");
@@ -45,14 +45,44 @@ public class BulletinServiceImpl implements BulletinService {
     }
 
     @Override
-    public List<Bulletin> getMyBulletin() {
+    public List<Bulletin> getMyBulletin(String aid) {
         List<Bulletin> list = bulletinMapper.selectAll();
-        for(int i=0;i<list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             BulletinAccount bulletinAccount = new BulletinAccount();
+            bulletinAccount.setBid(list.get(i).getBid());
+            bulletinAccount.setAid(aid);
+            bulletinAccount = bulletinAccountMapper.selectByBidAndAid(bulletinAccount);
+            if (bulletinAccount.getBastatus().equals("Y")) {
+                list.get(i).setMystatus("已读");
+            } else {
+                list.get(i).setMystatus("未读");
+            }
         }
         return list;
     }
 
+    @Override
+    public List<Bulletin> getNoticeBulletin(String aid){
+        BulletinAccount bulletinAccount = new BulletinAccount();
+        bulletinAccount.setAid(aid);
+        bulletinAccount.setBastatus("N");
+        List<BulletinAccount> BAlist = bulletinAccountMapper.selectByAidAndBastatus(bulletinAccount);
+        List<Bulletin> list = new ArrayList<>();
+        for(int i=0;i<BAlist.size();i++){
+           list.add(bulletinMapper.selectByBid(BAlist.get(i).getBid()));
+        }
+        System.out.println("BAlist------------"+BAlist);
+        System.out.println("list------------"+list);
+        return list;
+    }
+
+    @Override
+    public boolean changeStatus(BulletinAccount bulletinAccount) {
+        BulletinAccount bulletinAccount1 = bulletinAccountMapper.selectByBidAndAid(bulletinAccount);
+        bulletinAccount1.setBastatus("Y");
+        bulletinAccountMapper.update(bulletinAccount1);
+        return true;
+    }
 
     @Override
     public Bulletin getOneBulletin(String bid) {
@@ -87,7 +117,8 @@ public class BulletinServiceImpl implements BulletinService {
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getBsend().indexOf(inquire) >= 0
                     || list.get(i).getBtime().indexOf(inquire) >= 0
-                    || list.get(i).getBtitle().indexOf(inquire) >= 0) {
+                    || list.get(i).getBtitle().indexOf(inquire) >= 0
+                    || list.get(i).getMystatus().indexOf(inquire)>=0) {
                 bulletilnist.add(list.get(i));
             }
         }
@@ -106,7 +137,7 @@ public class BulletinServiceImpl implements BulletinService {
     }
 
     @Override
-    public boolean deleteBulletin(String bid){
+    public boolean deleteBulletin(String bid) {
         bulletinMapper.delete(bid);
         bulletinAccountMapper.deleteByBid(bid);
         return true;

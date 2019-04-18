@@ -9,6 +9,7 @@ public interface BulletinAccountMapper {
     BulletinAccount selectByBaid(String baid);
     BulletinAccount selectByBidAndAid(BulletinAccount bulletinAccount);
     List<BulletinAccount> selectByBidAndBastatus(BulletinAccount bulletinAccount);
+    List<BulletinAccount> selectByAidAndBastatus(BulletinAccount bulletinAccount);
     BulletinAccount selectByBstatus(String bastatus);
     boolean add(BulletinAccount bulletinAccount);
     boolean delete(String baid);

@@ -16,4 +16,8 @@ public interface AccountMessageService {
     boolean updateMessage(AccountMessage accountMessage);
 
     boolean addAccountMessage(AccountMessage accountMessage);
+
+    List<AccountMessage> getOnepageAccountMessage(List<AccountMessage> list, Integer limit, Integer page);
+
+    List<AccountMessage> getSearchAccountMessage(List<AccountMessage> list, String inquire);
 }

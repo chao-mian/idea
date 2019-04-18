@@ -2,6 +2,7 @@ package com.zhbit.oa.controller;
 
 import com.zhbit.oa.domain.*;
 import com.zhbit.oa.service.AccountMessageService;
+import com.zhbit.oa.service.BulletinService;
 import com.zhbit.oa.service.ProcessesService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.task.Task;
@@ -22,44 +23,18 @@ public class NoticeContorller {
     private String id;
     @Autowired
     private AccountMessageService accountMessageService;
+
+    @Autowired
+    private BulletinService bulletinService;
+
     @Autowired
     private ProcessesService processesService;
     @Autowired
     private TaskService taskService;
     @ResponseBody
     @RequestMapping(value = "/getNotice")
-    public LayuiNotice GetNotice(HttpServletRequest request){
-        Account user = (Account) request.getSession().getAttribute("loginUser");
-        System.out.println("user不为空" + user);
-        AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
-
-        String username = accountMessage.getaMname();
-        List<Processes> processesList = processesService.getAllProcessesList();
-        List<Notice> noticeList = new ArrayList<>();
-        for (int i = 0; i < processesList.size(); i++) {
-            Notice notice = new Notice();
-            Task task = taskService.createTaskQuery()
-                    .processDefinitionId(processesList.get(i)
-                            .getProcessesDefinitionId()).singleResult();
-            String processesStartUser = processesList.get(i).getProcessesStartUser();
-            System.out.println("流程创建者----" + processesStartUser);
-            if (task != null) {
-                if (task.getAssignee().equals(username)) {
-                    notice.setId(processesList.get(i).getProcessesDefinitionId());
-                    notice.setType("待办流程");
-                    notice.setTitle(processesList.get(i).getProcessesName());
-                    notice.setName(processesList.get(i).getProcessesStartUser());
-                    notice.setTime(processesList.get(i).getProcessesStartTime());
-                    noticeList.add(notice);
-                }
-            }
-        }
-        LayuiNotice layuiNotice = new LayuiNotice();
-        layuiNotice.setData(noticeList);
-        layuiNotice.setCode("0");
-        layuiNotice.setMsg("成功");
-        layuiNotice.setCount(String.valueOf(noticeList.size()));
-        System.out.println("noticeList----" + noticeList);
+    public LayuiNotice GetNotice( HttpServletRequest request){
+        LayuiNotice layuiNotice = (LayuiNotice)request.getSession().getAttribute("layuiNotice");
         return layuiNotice;
     }
 
@@ -74,6 +49,8 @@ public class NoticeContorller {
         session.setAttribute("noticeId", id);
         if(id.indexOf("leave")>=0){
             return "forward:/leaderApprovalForm";
+        }else if(bulletinService.getOneBulletin(id)!=null){
+            return "forward:/showMyBulletin";
         }
         return "no";
     }

@@ -14,6 +14,9 @@
     <select id="selectByBidAndBastatus" resultType="BulletinAccount" parameterType="BulletinAccount">
         select * from oa_bulletin_account where bid = #{bid} and bastatus = #{bastatus}
     </select>
+    <select id="selectByAidAndBastatus" resultType="BulletinAccount" parameterType="BulletinAccount">
+        select * from oa_bulletin_account where aid = #{aid} and bastatus = #{bastatus}
+    </select>
     <select id="selectByBstatus" resultType="BulletinAccount" parameterType="String">
         select * from oa_bulletin_account where bastatus = #{bastatus}
     </select>

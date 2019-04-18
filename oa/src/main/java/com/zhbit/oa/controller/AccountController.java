@@ -32,15 +32,17 @@ public class AccountController {
     private String jsonaAccount;
     private String jsonaStatus;
     @Autowired
-    MechanismService mechanismService;
+    private MechanismService mechanismService;
     @Autowired
-    AccountMessageService accountMessageService;
+    private AccountMessageService accountMessageService;
     @Autowired
-    PermissionService permissionService;
+    private BulletinService bulletinService;
     @Autowired
-    ProcessesService processesService;
+    private PermissionService permissionService;
     @Autowired
-    TaskService taskService;
+    private ProcessesService processesService;
+    @Autowired
+    private TaskService taskService;
 
 
     //获取页面jsona传回来的jsona
@@ -152,6 +154,7 @@ public class AccountController {
 
         String username = accountMessage.getaMname();
         List<Processes> processesList = processesService.getAllProcessesList();
+        List<Bulletin> bulletinList = bulletinService.getNoticeBulletin(user.getAid());
         List<Notice> noticeList = new ArrayList<>();
         for (int i = 0; i < processesList.size(); i++) {
             Notice notice = new Notice();
@@ -159,7 +162,7 @@ public class AccountController {
                     .processDefinitionId(processesList.get(i)
                             .getProcessesDefinitionId()).singleResult();
             String processesStartUser = processesList.get(i).getProcessesStartUser();
-//            System.out.println("流程创建者----" + processesStartUser);
+            System.out.println("流程创建者----" + processesStartUser);
             if (task != null) {
                 if (task.getAssignee().equals(username)) {
                     notice.setId(processesList.get(i).getProcessesDefinitionId());
@@ -170,17 +173,33 @@ public class AccountController {
                     noticeList.add(notice);
                 }
             }
-
         }
+        for(int i=0;i<bulletinList.size();i++){
+            Notice notice = new Notice();
+            notice.setId(bulletinList.get(i).getBid());
+            notice.setType("公告通知");
+            notice.setTitle(bulletinList.get(i).getBtitle());
+            notice.setName(bulletinList.get(i).getBsend());
+            notice.setTime(bulletinList.get(i).getBtime());
+            noticeList.add(notice);
+        }
+
+        LayuiNotice layuiNotice = new LayuiNotice();
+        layuiNotice.setData(noticeList);
+        layuiNotice.setCode("0");
+        layuiNotice.setMsg("成功");
+        layuiNotice.setCount(String.valueOf(noticeList.size()));
         System.out.println("noticeList----" + noticeList);
-        session.setAttribute("noticeList",noticeList);
+        System.out.println("noticeList----" + noticeList);
+        session.setAttribute("layuiNotice",layuiNotice);
         model.addAttribute("noticeList",noticeList);
         return "index";
     }
 
     @RequestMapping(value = "/main")
     public String Main(Model model, HttpServletRequest request){
-        List<Notice> noticeList = (List<Notice>)request.getSession().getAttribute("noticeList");
+        LayuiNotice layuiNotice = (LayuiNotice)request.getSession().getAttribute("layuiNotice");
+        List<Notice> noticeList = layuiNotice.getData();
         System.out.println(noticeList);
         model.addAttribute("noticeList",noticeList);
         return "main";
