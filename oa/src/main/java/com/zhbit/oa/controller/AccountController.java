@@ -154,7 +154,6 @@ public class AccountController {
             System.out.println("权限----"+listStr.get(i));
         }
         model.addAttribute("listStr", listStr);
-
         String username = accountMessage.getaMname();
         List<Processes> processesList = processesService.getAllProcessesList();
         List<Bulletin> bulletinList = bulletinService.getNoticeBulletin(user.getAid());
@@ -201,12 +200,55 @@ public class AccountController {
 
     @RequestMapping(value = "/main")
     public String Main(Model model, HttpServletRequest request){
-        LayuiNotice layuiNotice = (LayuiNotice)request.getSession().getAttribute("layuiNotice");
-        List<Notice> noticeList = layuiNotice.getData();
+        Account user = (Account) request.getSession().getAttribute("loginUser");
+        AccountMessage accountMessage = accountMessageService.findByAid(user.getAusername());
+        model.addAttribute("accountMessage", accountMessage);
+        String username = accountMessage.getaMname();
+        List<Processes> processesList = processesService.getAllProcessesList();
+        List<Bulletin> bulletinList = bulletinService.getNoticeBulletin(user.getAid());
+        List<Notice> noticeList = new ArrayList<>();
+        for (int i = 0; i < processesList.size(); i++) {
+            Notice notice = new Notice();
+            Task task = taskService.createTaskQuery()
+                    .processDefinitionId(processesList.get(i)
+                            .getProcessesDefinitionId()).singleResult();
+            String processesStartUser = processesList.get(i).getProcessesStartUser();
+            System.out.println("流程创建者----" + processesStartUser);
+            if (task != null) {
+                if (task.getAssignee().equals(username)) {
+                    notice.setId(processesList.get(i).getProcessesDefinitionId());
+                    notice.setType("待办流程");
+                    notice.setTitle(processesList.get(i).getProcessesName());
+                    notice.setName(processesList.get(i).getProcessesStartUser());
+                    notice.setTime(processesList.get(i).getProcessesStartTime());
+                    noticeList.add(notice);
+                }
+            }
+        }
+        for(int i=0;i<bulletinList.size();i++){
+            Notice notice = new Notice();
+            notice.setId(bulletinList.get(i).getBid());
+            notice.setType("公告通知");
+            notice.setTitle(bulletinList.get(i).getBtitle());
+            notice.setName(bulletinList.get(i).getBsend());
+            notice.setTime(bulletinList.get(i).getBtime());
+            noticeList.add(notice);
+        }
+
+        LayuiNotice layuiNotice = new LayuiNotice();
+        layuiNotice.setData(noticeList);
+        layuiNotice.setCode("0");
+        layuiNotice.setMsg("成功");
+        layuiNotice.setCount(String.valueOf(noticeList.size()));
+        System.out.println("noticeList----" + noticeList);
+        System.out.println("noticeList----" + noticeList);
+//        session.setAttribute("layuiNotice",layuiNotice);
+        List<Notice> noticeList1 = layuiNotice.getData();
         List<News> newsList = newsService.getAllNews();
-        System.out.println(noticeList);
-        model.addAttribute("noticeList",noticeList);
+        System.out.println("main中的noticeList----------"+noticeList1);
+        model.addAttribute("noticeList",noticeList1);
         model.addAttribute("newsList",newsList);
+//        session.setAttribute("layuiNotice",null);
         return "main";
     }
 

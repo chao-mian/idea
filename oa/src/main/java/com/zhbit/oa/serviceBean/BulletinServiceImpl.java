@@ -62,17 +62,17 @@ public class BulletinServiceImpl implements BulletinService {
     }
 
     @Override
-    public List<Bulletin> getNoticeBulletin(String aid){
+    public List<Bulletin> getNoticeBulletin(String aid) {
         BulletinAccount bulletinAccount = new BulletinAccount();
         bulletinAccount.setAid(aid);
         bulletinAccount.setBastatus("N");
         List<BulletinAccount> BAlist = bulletinAccountMapper.selectByAidAndBastatus(bulletinAccount);
         List<Bulletin> list = new ArrayList<>();
-        for(int i=0;i<BAlist.size();i++){
-           list.add(bulletinMapper.selectByBid(BAlist.get(i).getBid()));
+        for (int i = 0; i < BAlist.size(); i++) {
+            list.add(bulletinMapper.selectByBid(BAlist.get(i).getBid()));
         }
-        System.out.println("BAlist------------"+BAlist);
-        System.out.println("list------------"+list);
+        System.out.println("BAlist------------" + BAlist);
+        System.out.println("list------------" + list);
         return list;
     }
 
@@ -96,7 +96,7 @@ public class BulletinServiceImpl implements BulletinService {
         Integer listStart = (page - 1) * limit;
         Integer listEnd;
         if (page != pagesize) {
-            listEnd = (page - 1) * limit + limit - 1;
+            listEnd = (page - 1) * limit + limit;
         } else {
             listEnd = list.size();
         }
@@ -118,7 +118,8 @@ public class BulletinServiceImpl implements BulletinService {
             if (list.get(i).getBsend().indexOf(inquire) >= 0
                     || list.get(i).getBtime().indexOf(inquire) >= 0
                     || list.get(i).getBtitle().indexOf(inquire) >= 0
-                    || list.get(i).getMystatus().indexOf(inquire)>=0) {
+                    || String.valueOf(list.get(i).getRead()).equals(inquire)
+                    || String.valueOf(list.get(i).getNoread()).equals(inquire)) {
                 bulletilnist.add(list.get(i));
             }
         }

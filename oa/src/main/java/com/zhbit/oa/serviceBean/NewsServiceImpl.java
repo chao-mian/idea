@@ -62,10 +62,11 @@ public class NewsServiceImpl implements NewsService {
         Integer listStart = (page - 1) * limit;
         Integer listEnd;
         if (page != pagesize) {
-            listEnd = (page - 1) * limit + limit - 1;
+            listEnd = (page - 1) * limit + limit;
         } else {
             listEnd = list.size();
         }
+        System.out.println("limit--------" + limit);
         System.out.println("pagesize--------" + pagesize);
         System.out.println("listStart--------" + listStart);
         System.out.println("listEnd--------" + listEnd);

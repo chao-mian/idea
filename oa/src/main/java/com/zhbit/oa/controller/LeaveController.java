@@ -155,7 +155,7 @@ public class LeaveController {
         ProcessInstance processInstance = formService.submitStartFormData(processDefinitionId, variables);
         processId = processInstance.getId();
         model.addAttribute("flag", "流程发送成功，请到我的流程中查看流程");
-        return "newProcesses";
+        return "forward:/newProcesses";
 
     }
 

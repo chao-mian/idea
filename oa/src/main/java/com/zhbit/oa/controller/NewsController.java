@@ -68,7 +68,9 @@ public class NewsController {
         LayuiNews layuiNews = new LayuiNews();
         layuiNews.setCode("0");
         layuiNews.setMsg("成功");
-        layuiNews.setCount(String.valueOf(showNewsList.size()));
+        layuiNews.setLimit(limit);
+        layuiNews.setPage(page);
+        layuiNews.setCount(String.valueOf(allNewslist.size()));
         layuiNews.setData(showNewsList);
         return layuiNews;
     }

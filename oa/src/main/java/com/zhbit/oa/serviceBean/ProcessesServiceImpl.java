@@ -156,7 +156,7 @@ public class ProcessesServiceImpl implements ProcessesService {
         Integer listStart = (page - 1) * limit;
         Integer listEnd;
         if (page != pagesize) {
-            listEnd = (page - 1) * limit + limit - 1;
+            listEnd = (page - 1) * limit + limit;
         } else {
             listEnd = list.size();
         }

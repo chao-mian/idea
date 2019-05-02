@@ -121,6 +121,8 @@ public class BulletinController {
         LayuiBulletin layuiBulletin = new LayuiBulletin();
         layuiBulletin.setCode("0");
         layuiBulletin.setMsg("成功");
+        layuiBulletin.setLimit(limit);
+        layuiBulletin.setPage(page);
         layuiBulletin.setCount(String.valueOf(allBulletinlist.size()));
         layuiBulletin.setData(showBulletinList);
         return layuiBulletin;

@@ -124,6 +124,10 @@ alert(flag);
                         content: 'addBulletin' //这里content是一个普通的String
                         , cancel: function (index, layero) {
                             window.location.reload();//刷新当前页面.
+                            top.$('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                            // top.$('.num').remove();
+                            top.$('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+
                             layer.close(index);
 
                         }
@@ -200,6 +204,7 @@ alert(flag);
                             content: 'showTheBulletin' //这里content是一个普通的String
                             , cancel: function (index, layero) {
                                 // window.location.reload();//刷新当前页面.
+
                                 layer.close(index);
                                 return false;
                             }

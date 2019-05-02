@@ -112,7 +112,7 @@
                         </span>
                         <span class="title">公告通知</span>
                     </h2>
-                    <div class="content-bd">
+                    <div class="content-bd" id="bulletinout">
                         <ul class="content-list things" id="bulletin">
                         </ul>
                     </div>
@@ -207,42 +207,46 @@
 <script type="text/javascript" th:inline="javascript">
     var noticeList = [[${noticeList}]];
     var newsList = [[${newsList}]];
-    for (var i = 0; i < noticeList.length; i++) {
-        var processes = noticeList[i];
-        if (processes.type == '待办流程') {
+    newmessage();
+    function newmessage() {
+        for (var i = 0; i < noticeList.length; i++) {
+            var processes = noticeList[i];
+            if (processes.type == '待办流程') {
+                var content = '<li class="content-list-item">' +
+                    '<i class="icon"></i>' +
+                    '<a class="processesa" name="processes" id="' + processes.id + '" onclick="dianji(this)">' + processes.title + '</a>' +
+                    '<div style="float:right;">' +
+                    processes.name +
+                    processes.time +
+                    '</div>' +
+                    '</li>';
+                // alert(content);
+                $('#todoprocesses').append(content);
+            }
+            if (processes.type == '公告通知') {
+                var content = '<li class="content-list-item">' +
+                    '<i class="icon"></i>' +
+                    '<a class="bulletin" name="bulletin" id="' + processes.id + '" onclick="dianji(this)">' + processes.title + '</a>' +
+                    '<div style="float:right;">' +
+                    processes.name +
+                    processes.time +
+                    '</div>' +
+                    '</li>';
+                // alert(content);
+                $('#bulletin').append(content);
+            }
+        }
+        for (var i = 0; i < newsList.length; i++) {
+            var news = newsList[i];
             var content = '<li class="content-list-item">' +
                 '<i class="icon"></i>' +
-                '<a class="processesa" name="processes" id="' + processes.id + '" onclick="dianji(this)">' + processes.title + '</a>' +
-                '<div style="float:right;">' +
-                processes.name +
-                processes.time +
-                '</div>' +
+                '<a class="news" name="news" id="' + news.nid + '" onclick="dianji(this)">' + news.ntitle + '</a>'+
                 '</li>';
             // alert(content);
-            $('#todoprocesses').append(content);
-        }
-        if (processes.type == '公告通知') {
-            var content = '<li class="content-list-item">' +
-                '<i class="icon"></i>' +
-                '<a class="bulletin" name="bulletin" id="' + processes.id + '" onclick="dianji(this)">' + processes.title + '</a>' +
-                '<div style="float:right;">' +
-                processes.name +
-                processes.time +
-                '</div>' +
-                '</li>';
-            // alert(content);
-            $('#bulletin').append(content);
+            $('#news').append(content);
         }
     }
-    for (var i = 0; i < newsList.length; i++) {
-        var news = newsList[i];
-        var content = '<li class="content-list-item">' +
-            '<i class="icon"></i>' +
-            '<a class="news" name="news" id="' + news.nid + '" onclick="dianji(this)">' + news.ntitle + '</a>'+
-            '</li>';
-        // alert(content);
-        $('#news').append(content);
-    }
+
 
     function dianji(obj) {
         // alert(obj.name);
@@ -335,9 +339,16 @@
                                 top.$('#avatar').load("index" + ' #avatar').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
                                 // top.$('.num').remove();
                                 top.$('.num').load("index" + ' .num').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
+                                // window.$('#bulletin').load("main" + ' #bulletin').fadeIn('slow');//刷新当前页面.
+                                // $('.content-bd').remove();
                                 window.location.reload();//刷新当前页面.
-                                // top.$('.info-num').remove();
+                                console.log(noticeList);
+                                // layer.alert(noticeList);
+                                // newmessage();
+                                // $('#bulletinout').load("main" + ' #bulletinout').fadeIn('slow'); // 加载新内容,url地址与该地址下的选择器之间要有空格,表示该url下的#container
 
+
+                                // top.$('.info-num').remove();
                                 layer.close(index);
                             }
                             // content: 'ok' //这里content是一个普通的String
@@ -347,7 +358,10 @@
                         layer.alert("false");
                     }
                 });
+
+
             });
+
         }
 
     }
